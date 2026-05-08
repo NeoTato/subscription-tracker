@@ -3,9 +3,30 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import date
+import schemas
 import models
 
 app = FastAPI()
+
+# Adds new subscription
+@app.post("/add")
+def add_subscription(sub_data: schemas.SubscriptionCreate):  
+    db: Session = models.SessionLocal()
+    try: 
+        # Creates new object 
+        new_entry = models.Subscription(**sub_data.model_dump())
+
+        db.add(new_entry)
+        db.commit()
+        db.refresh(new_entry)
+        
+        return {"message": "Success!", "added": new_entry}
+    
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}
+    finally:
+        db.close()
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -24,7 +45,7 @@ def home():
 def get_table():
     db: Session = models.SessionLocal()
     try:
-        # returns name, price, billing date and sorted by billing date ()
+        # returns name, price, and due date, sorted by due date ()
         results = db.query(
             models.Subscription.name, 
             models.Subscription.price, 
