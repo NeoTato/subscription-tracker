@@ -8,6 +8,26 @@ import models
 
 app = FastAPI()
 
+def to_monthly(subscription):
+    if subscription.billing_cycle == "monthly":
+        return subscription.price
+    elif subscription.billing_cycle == "yearly":
+        return subscription.price / 12
+    elif subscription.billing_cycle == "weekly":
+        return subscription.price * 4
+    elif subscription.billing_cycle == "daily":
+        return subscription.price * 30
+    else:
+        return subscription.price
+
+def to_PHP(price, currency):
+    if currency == "USD":
+        return price * 60
+    elif currency == "JPY":
+        return price * 0.39
+    else:
+        return price
+
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
@@ -60,8 +80,8 @@ def get_summary():
         my_subs = [s for s in all_subs]
         
         # calculate total cost of subs PAID BY ME
-        total_cost = sum(s.price for s in paid_subs)
-        
+        total_cost = sum(to_PHP(to_monthly(s), s.currency) for s in paid_subs)
+
         # find the next payment date sorted by next_due_date
         upcoming = sorted(paid_subs, key=lambda x: x.next_due_date)[0]
         
