@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-from typing import Optional
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 import models

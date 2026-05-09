@@ -5,6 +5,7 @@ from typing import Optional
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 from contextlib import asynccontextmanager
+import notifications
 import schemas
 import models
 import utils
@@ -15,6 +16,7 @@ from contextlib import asynccontextmanager
 async def lifespan(app: FastAPI):
     # runs on startup
     utils.advance_due_dates()
+    notifications.check_and_notify()
     yield
     # anything after yield runs on shutdown
 
