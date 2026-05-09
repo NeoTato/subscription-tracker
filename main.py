@@ -3,11 +3,23 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
+from contextlib import asynccontextmanager
 import schemas
 import models
 import utils
 
-app = FastAPI()
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # runs on startup
+    utils.advance_due_dates()
+    yield
+    # anything after yield runs on shutdown
+
+app = FastAPI(lifespan=lifespan)
+
 
 @app.get("/", response_class=HTMLResponse)
 def home():
