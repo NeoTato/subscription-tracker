@@ -40,7 +40,7 @@ def home():
 def get_table():
     db: Session = models.SessionLocal()
     try:
-        # returns name, price, and due date, sorted by due date ()
+        # returns name, price, and due date, sorted by due date
         results = db.query(
             models.Subscription.name, 
             models.Subscription.price, 
