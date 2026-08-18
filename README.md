@@ -1,4 +1,4 @@
-# 🔐 SubSentry — Subscription Tracking API
+# SubSentry — Subscription Tracking API
 
 SubSentry is a personal subscription management API that tracks recurring payments, sends smart alerts, and normalizes costs across billing cycles and currencies — all in one place.
 
