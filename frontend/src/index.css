@@ -2,13 +2,13 @@
 
 @layer base {
   :root {
-    --background: #0A0A0F;
-    --background-alt: #12121A;
-    --foreground: #FAFAFA;
-    --muted: #1A1A24;
-    --muted-foreground: #71717A;
-    --accent: #F59E0B;
-    --accent-foreground: #0A0A0F;
+    --background: #0a0a0f;
+    --background-alt: #12121a;
+    --foreground: #fafafa;
+    --muted: #1a1a24;
+    --muted-foreground: #71717a;
+    --accent: #f59e0b;
+    --accent-foreground: #0a0a0f;
     --accent-muted: rgba(245, 158, 11, 0.15);
     --border: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(255, 255, 255, 0.15);
@@ -19,17 +19,29 @@
     background-color: var(--background);
     color: var(--foreground);
     min-height: 100vh;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", system-ui, sans-serif;
     letter-spacing: -0.025em;
   }
 
-  code, pre, .font-mono {
-    font-family: 'JetBrains Mono', monospace;
+  code,
+  pre,
+  .font-mono {
+    font-family: "JetBrains Mono", monospace;
   }
 }
 
@@ -56,7 +68,9 @@
 /* Highlighted Amber Glass Card */
 .glass-card-highlight {
   border: 1px solid rgba(245, 158, 11, 0.3);
-  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2), 0 0 30px rgba(245, 158, 11, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(245, 158, 11, 0.2),
+    0 0 30px rgba(245, 158, 11, 0.12);
 }
 
 /* Glass Inputs */
@@ -65,20 +79,22 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  color: #FAFAFA;
+  color: #fafafa;
   transition: all 200ms ease-out;
 }
 
 .glass-input:focus {
   outline: none;
   border-color: rgba(245, 158, 11, 0.5);
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.1);
+  box-shadow:
+    0 0 0 2px rgba(245, 158, 11, 0.2),
+    0 0 20px rgba(245, 158, 11, 0.1);
 }
 
 /* Primary Amber Button */
 .btn-amber-primary {
-  background-color: #F59E0B;
-  color: #0A0A0F;
+  background-color: #f59e0b;
+  color: #0a0a0f;
   font-weight: 500;
   border-radius: 8px;
   transition: all 200ms ease-out;
@@ -96,7 +112,7 @@
 /* Secondary Ghost Button */
 .btn-secondary {
   background: transparent;
-  color: #FAFAFA;
+  color: #fafafa;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   transition: all 200ms ease-out;
@@ -117,10 +133,10 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #0a0a0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1A1A24;
+  background: #1a1a24;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {

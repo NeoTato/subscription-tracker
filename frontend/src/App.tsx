@@ -1,12 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Navbar } from './components/Navbar';
-import { KPIOverview } from './components/KPIOverview';
-import { AlertBanner } from './components/AlertBanner';
-import { ExpenseChart } from './components/ExpenseChart';
-import { SubscriptionTable } from './components/SubscriptionTable';
-import { SubscriptionModal } from './components/SubscriptionModal';
-import { api, SummaryResponse, AlertsResponse, Subscription, SubscriptionCreate } from './services/api';
-import { Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from "react";
+import { Navbar } from "./components/Navbar";
+import { KPIOverview } from "./components/KPIOverview";
+import { AlertBanner } from "./components/AlertBanner";
+import { ExpenseChart } from "./components/ExpenseChart";
+import { SubscriptionTable } from "./components/SubscriptionTable";
+import { SubscriptionModal } from "./components/SubscriptionModal";
+import {
+  api,
+  SummaryResponse,
+  AlertsResponse,
+  Subscription,
+  SubscriptionCreate,
+} from "./services/api";
+import { Sparkles, CheckCircle2, ShieldCheck } from "lucide-react";
 
 export function App() {
   const [summary, setSummary] = useState<SummaryResponse | null>(null);
@@ -38,7 +44,7 @@ export function App() {
       setAlerts(alertData);
       setSubscriptions(subsData);
     } catch (err: any) {
-      console.error('Failed to load data:', err);
+      console.error("Failed to load data:", err);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -54,9 +60,9 @@ export function App() {
     try {
       await api.advanceDates();
       await loadData();
-      showToast('Data refreshed & overdue dates synced.');
+      showToast("Data refreshed & overdue dates synced.");
     } catch (err: any) {
-      showToast('Error syncing dates: ' + err.message);
+      showToast("Error syncing dates: " + err.message);
       setIsRefreshing(false);
     }
   };
@@ -65,14 +71,14 @@ export function App() {
     try {
       const res = await api.triggerNotification();
       if (res?.result?.notification_sent) {
-        showToast('Telegram alert dispatched successfully.');
+        showToast("Telegram alert dispatched successfully.");
       } else if (res?.result?.has_alerts) {
-        showToast('Alerts evaluated (check TELEGRAM_BOT_TOKEN in .env).');
+        showToast("Alerts evaluated (check TELEGRAM_BOT_TOKEN in .env).");
       } else {
-        showToast('No renewals or urgent alerts due this week.');
+        showToast("No renewals or urgent alerts due this week.");
       }
     } catch (err: any) {
-      showToast('Notification trigger error: ' + err.message);
+      showToast("Notification trigger error: " + err.message);
     }
   };
 
@@ -100,20 +106,20 @@ export function App() {
   const handleDeleteSubscription = async (id: number) => {
     try {
       await api.deleteSubscription(id);
-      showToast('Subscription removed.');
+      showToast("Subscription removed.");
       await loadData();
     } catch (err: any) {
-      showToast('Failed to delete: ' + err.message);
+      showToast("Failed to delete: " + err.message);
     }
   };
 
   const handleDismissReminder = async (id: number) => {
     try {
       await api.updateSubscription(id, { remind_to_cancel: false });
-      showToast('Cancellation reminder turned off.');
+      showToast("Cancellation reminder turned off.");
       await loadData();
     } catch (err: any) {
-      showToast('Failed to update: ' + err.message);
+      showToast("Failed to update: " + err.message);
     }
   };
 
@@ -126,7 +132,10 @@ export function App() {
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-[#1A1A24] border border-amber-500/30 text-white shadow-[0_10px_30px_rgba(0,0,0,0.8),0_0_20px_rgba(245,158,11,0.2)] text-xs font-medium flex items-center gap-2.5 animate-fade-in">
-          <CheckCircle2 className="w-4 h-4 text-amber-400" strokeWidth={2} />
+          <CheckCircle2
+            className="w-4 h-4 text-amber-400"
+            strokeWidth={2}
+          />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -143,10 +152,16 @@ export function App() {
       {/* Main Content Area */}
       <main className="max-w-6xl w-full mx-auto px-6 md:px-8 py-10 space-y-8 flex-1">
         {/* KPI Metric Cards */}
-        <KPIOverview summary={summary} alertCount={alerts?.total_alerts || 0} />
+        <KPIOverview
+          summary={summary}
+          alertCount={alerts?.total_alerts || 0}
+        />
 
         {/* Active Alert Banners */}
-        <AlertBanner alerts={alerts} onDismissReminder={handleDismissReminder} />
+        <AlertBanner
+          alerts={alerts}
+          onDismissReminder={handleDismissReminder}
+        />
 
         {/* Analytics & Insight Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -155,6 +170,7 @@ export function App() {
             <ExpenseChart
               categories={summary?.categories || []}
               totalMonthly={summary?.monthly_total || 0}
+              onAddClick={handleAddSubscription}
             />
           </div>
 
@@ -162,29 +178,38 @@ export function App() {
           <div className="glass-card p-6 md:p-8 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 text-amber-400 font-display font-semibold text-sm mb-4">
-                <Sparkles className="w-4 h-4" strokeWidth={1.5} />
+                <Sparkles
+                  className="w-4 h-4"
+                  strokeWidth={1.5}
+                />
                 <span>Atmospheric Intelligence</span>
               </div>
               <ul className="space-y-3.5 text-xs text-zinc-400 font-sans">
                 <li className="flex items-start gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
                   <span>
-                    Normalized annual recurring commitments equal{' '}
+                    Normalized annual recurring commitments equal{" "}
                     <strong className="text-white font-mono font-medium">
-                      ₱{(summary?.annual_total || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })}
-                    </strong>.
+                      ₱
+                      {(summary?.annual_total || 0).toLocaleString("en-US", {
+                        maximumFractionDigits: 0,
+                      })}
+                    </strong>
+                    .
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 mt-1.5 shrink-0" />
                   <span>
-                    Automatic daily rollover updates overdue renewal dates every morning at 09:00 AM.
+                    Automatic daily rollover updates overdue renewal dates every
+                    morning at 09:00 AM.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 mt-1.5 shrink-0" />
                   <span>
-                    Foreign billing currencies (USD, JPY, EUR) are normalized to Philippine Pesos (PHP).
+                    Foreign billing currencies (USD, JPY, EUR) are normalized to
+                    Philippine Pesos (PHP).
                   </span>
                 </li>
               </ul>
@@ -202,6 +227,7 @@ export function App() {
           subscriptions={subscriptions}
           onEdit={handleEditSubscription}
           onDelete={handleDeleteSubscription}
+          onAddClick={handleAddSubscription}
         />
       </main>
 
@@ -216,10 +242,16 @@ export function App() {
       {/* Atmospheric Footer */}
       <footer className="border-t border-white/[0.06] py-8 text-center text-xs text-zinc-600 font-sans">
         <div className="flex items-center justify-center gap-2 mb-1 text-zinc-500 font-display">
-          <ShieldCheck className="w-4 h-4 text-amber-500/60" strokeWidth={1.5} />
+          <ShieldCheck
+            className="w-4 h-4 text-amber-500/60"
+            strokeWidth={1.5}
+          />
           <span>SubSentry</span>
         </div>
-        <p>Atmospheric Personal Subscription Management · &copy; {new Date().getFullYear()}</p>
+        <p>
+          Atmospheric Personal Subscription Management · &copy;{" "}
+          {new Date().getFullYear()}
+        </p>
       </footer>
     </div>
   );

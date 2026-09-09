@@ -7,7 +7,9 @@ import {
   CreditCard, 
   Tag, 
   CheckCircle2, 
-  AlertCircle 
+  AlertCircle,
+  Plus,
+  PackageOpen
 } from 'lucide-react';
 import { Subscription } from '../services/api';
 
@@ -15,12 +17,14 @@ interface SubscriptionTableProps {
   subscriptions: Subscription[];
   onEdit: (sub: Subscription) => void;
   onDelete: (id: number) => void;
+  onAddClick?: () => void;
 }
 
 export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   subscriptions,
   onEdit,
   onDelete,
+  onAddClick,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -130,8 +134,25 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           <tbody className="divide-y divide-white/[0.04] text-xs text-zinc-300">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-16 text-center text-zinc-500 font-sans">
-                  No subscriptions match your search or filter criteria.
+                <td colSpan={8} className="py-16 text-center text-zinc-400 font-sans">
+                  <div className="flex flex-col items-center justify-center max-w-xs mx-auto">
+                    <div className="w-10 h-10 rounded-xl bg-[#1A1A24] border border-white/[0.08] flex items-center justify-center text-zinc-500 mb-3">
+                      <PackageOpen className="w-5 h-5" strokeWidth={1.5} />
+                    </div>
+                    <p className="text-sm font-display font-medium text-zinc-200">No subscriptions found</p>
+                    <p className="text-xs text-zinc-500 mt-1 mb-4">
+                      {searchTerm ? 'No results matched your search criteria.' : 'Start tracking your monthly subscriptions and renewals.'}
+                    </p>
+                    {onAddClick && (
+                      <button
+                        onClick={onAddClick}
+                        className="px-4 py-2 bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0A0A0F] text-xs font-semibold rounded-lg shadow-sm transition active:scale-95 flex items-center gap-1.5"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-[#0A0A0F]" strokeWidth={2.5} />
+                        <span>Add Subscription</span>
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -149,7 +170,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     {/* Service Name & Provider */}
                     <td className="py-4 px-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-[#14141E] border border-white/[0.08] flex items-center justify-center font-display font-bold text-amber-400 text-xs">
+                        <div className="w-8 h-8 rounded-lg bg-[#14141E] border border-white/[0.08] flex items-center justify-center font-display font-bold text-[#F59E0B] text-xs">
                           {sub.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -193,7 +214,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     <td className="py-4 px-5 font-mono">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-zinc-500" strokeWidth={1.5} />
-                        <span className={isDueSoon ? 'text-amber-400 font-medium' : 'text-zinc-300'}>
+                        <span className={isDueSoon ? 'text-[#F59E0B] font-medium' : 'text-zinc-300'}>
                           {new Date(sub.next_due_date).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
