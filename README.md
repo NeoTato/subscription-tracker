@@ -1,121 +1,124 @@
 # SubSentry — Subscription Tracking API
 
-SubSentry is a personal subscription management API that tracks recurring payments, sends smart alerts, and normalizes costs across billing cycles and currencies — all in one place.
+SubSentry is a lightweight subscription management API that tracks recurring payments, normalizes costs across billing cycles and currencies, and sends alerts (Telegram by default).
 
-Built with **FastAPI** and **SQLite**, this project focuses on clean data modeling, automated renewal tracking, and real-time Telegram notifications.
-
----
-
-##  Features
-
-- **Full CRUD** — Add, view, update, and delete subscriptions
-- **Cost Normalization** — Converts all billing cycles (daily, weekly, monthly, yearly) to a monthly PHP equivalent for accurate spending summaries
-- **Multi-currency Support** — Handles PHP, USD, and JPY conversions automatically
-- **Auto Date Advance** — Automatically rolls over overdue `next_due_date` values on startup
-- **Telegram Notifications** — Sends formatted alerts for subscriptions due within 7 days and cancellation reminders
-- **Smart Alerts** — Flags subscriptions to cancel, student plan expiries, and upcoming payments
+Built with FastAPI + SQLite for a simple, single-user setup that is easy to extend to multi-user deployments.
 
 ---
 
-## 🛠️ Tech Stack
+## Quick Overview
 
-| Layer | Technology |
-|---|---|
-| Language | Python |
-| Framework | FastAPI |
-| Database | SQLite via SQLAlchemy ORM |
-| Validation | Pydantic |
-| Notifications | Telegram Bot API |
-| Environment | python-dotenv |
+- CRUD for subscriptions (create/read/update/delete)
+- Converts billing cycles to a monthly equivalent and normalizes currencies
+- Auto-advances overdue `next_due_date` values on startup
+- Telegram notifications for due-soon and cancellation reminders
 
 ---
 
-## 🚀 Getting Started
+## Setup & Run (local)
 
-### 1. Clone the Repository
+1. Create and activate a virtual environment
+
 ```bash
-git clone https://github.com/yourusername/subsentry.git
-cd subsentry
-```
-
-### 2. Set Up Virtual Environment
-```bash
+python -m venv .venv
 # Windows
-venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
+.venv\Scripts\activate
+venv\bin\activate.bat # This also works
+# macOS / Linux
+source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+2. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment Variables
-Create a `.env` file in the root directory:
+3. Create `.env` with at minimum:
+
 ```
 TELEGRAM_BOT_TOKEN=your_token_here
 TELEGRAM_CHAT_ID=your_chat_id_here
 ```
 
-### 5. Run the Application
+4. Start the app (development)
+
 ```bash
 python -m uvicorn main:app --reload
 ```
 
-### 6. Access the API
-Visit the interactive Swagger UI at: http://127.0.0.1:8000/docs
+5. Open the API docs: `http://127.0.0.1:8000/docs`
+
+Notes:
+
+- The default SQLite DB file is `subsentry.db` in the project root.
+- FastAPI exposes an OpenAPI spec at `/openapi.json` which is useful for frontend tooling.
 
 ---
 
-## 📡 API Endpoints
+## Useful Examples
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Home page |
-| `GET` | `/subscription` | List all subscriptions (id, name, price) |
-| `GET` | `/subscription/{id}` | Get a single subscription |
-| `GET` | `/table` | Full table sorted by due date |
-| `GET` | `/summary` | Monthly total, next payment, full breakdown |
-| `GET` | `/alerts` | Due-soon, cancellation, and student expiry alerts |
-| `POST` | `/add` | Add a new subscription |
-| `PUT` | `/update/{id}` | Update an existing subscription |
-| `DELETE` | `/delete/{id}` | Delete a subscription |
+Create a subscription (curl):
 
----
-
-## 🗂️ Project Structure
-
-```
-subsentry/
-├── main.py            # API endpoints and app lifecycle
-├── models.py          # SQLAlchemy database models
-├── schemas.py         # Pydantic validation schemas
-├── utils.py           # Helper functions (cost normalization, currency conversion)
-├── notifications.py   # Telegram notification logic
-├── .env               # Environment variables (not committed)
-└── requirements.txt   # Project dependencies
+```bash
+curl -X POST "http://127.0.0.1:8000/add" -H "Content-Type: application/json" -d '{
+	"name": "YouTube Premium",
+	"price": 159.0,
+	"next_due_date": "2026-12-01",
+	"billing_cycle": "monthly",
+	"currency": "PHP"
+}'
 ```
 
----
+Get all subscriptions:
 
-## 🗺️ Roadmap
+```bash
+curl http://127.0.0.1:8000/subscription
+```
 
-- [x] Full CRUD for subscriptions
-- [x] Database schema and ORM setup
-- [x] Monthly cost normalization across billing cycles
-- [x] Multi-currency conversion (PHP, USD, JPY)
-- [x] Auto-advance overdue renewal dates on startup
-- [x] Telegram notifications for due-soon and cancellation alerts
-- [ ] Scheduled daily notifications via APScheduler
-- [ ] Email notifications via SMTP or SendGrid
-- [ ] Clean frontend dashboard (HTML/CSS or React)
-- [ ] User authentication
-- [ ] Cloud deployment (Railway / Render)
+Update a subscription (partial fields via query params):
+
+```bash
+curl -X PUT "http://127.0.0.1:8000/update/1?new_price=199.0"
+```
 
 ---
 
-## 👨‍💻 Author
+## API Endpoints (summary)
+
+- `GET /` — Home (basic links)
+- `GET /subscription` — List subscriptions (id, name, price, billing cycle, next_due_date)
+- `GET /get/{id}` — Get a single subscription by id
+- `GET /table` — Compact table view (name, price, billing date)
+- `GET /summary` — Monthly normalized total and next payment
+- `GET /alerts` — Urgent reminders, due-soon, student-expiry reminders
+- `POST /add` — Add a subscription (JSON body following `SubscriptionCreate` in `schemas.py`)
+- `PUT /update/{id}` — Update fields via query parameters
+- `DELETE /delete/{id}` — Delete a subscription
+
+---
+
+- Add authentication and per-user isolation before exposing to the public.
+- Replace direct DB file usage with a proper migrations flow (Alembic) for schema changes.
+- Harden input validation (Pydantic models) and return consistent response models.
+- Add tests for `utils.to_monthly`, `utils.advance_due_dates`, and `notifications.format_message`.
+- Convert `/update/{id}` to accept a JSON body for partial updates (PATCH semantics) rather than many query params.
+
+---
+
+## Frontend / React SPA
+
+SubSentry is designed to connect to a modern React / Vite SPA frontend with Tailwind CSS and Lucide icons.
+
+---
+
+## Security
+
+- Keep `.env` out of source control; use a secrets manager for production.
+- Validate and sanitize all input before writing to DB.
+
+---
+
+## License & Author
 
 Built by NeoTato as a personal project to practice FastAPI, SQLAlchemy, and real-world API design.

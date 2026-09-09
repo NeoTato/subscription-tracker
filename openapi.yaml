@@ -1,0 +1,280 @@
+openapi: 3.0.0
+info:
+  title: SubSentry API
+  version: "1.0.0"
+  description: API spec for the SubSentry subscription tracker (FastAPI backend)
+servers:
+  - url: http://localhost:8000
+paths:
+  /:
+    get:
+      summary: Home page
+      responses:
+        '200':
+          description: HTML home page
+          content:
+            text/html:
+              schema:
+                type: string
+  /subscription:
+    get:
+      summary: List subscriptions
+      description: Returns subscriptions sorted by next_due_date
+      responses:
+        '200':
+          description: Array of subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+  /get/{id}:
+    get:
+      summary: Get subscription by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subscription object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '404':
+          description: Not found
+  /table:
+    get:
+      summary: Compact table view
+      responses:
+        '200':
+          description: Formatted table array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableEntry'
+  /summary:
+    get:
+      summary: Monthly summary and next payment
+      responses:
+        '200':
+          description: Summary object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Summary'
+  /alerts:
+    get:
+      summary: Alerts (due-soon, cancellations, student expiries)
+      responses:
+        '200':
+          description: Alerts object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerts'
+  /add:
+    post:
+      summary: Create a subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+      responses:
+        '201':
+          description: Created subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Bad request
+  /update/{id}:
+    put:
+      summary: Update a subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionUpdate'
+      responses:
+        '200':
+          description: Updated subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '404':
+          description: Not found
+  /delete/{id}:
+    delete:
+      summary: Delete subscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+        '404':
+          description: Not found
+components:
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        platform:
+          type: string
+        plan_type:
+          type: string
+          enum: [solo,duo,family,team]
+        tier:
+          type: string
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          enum: [PHP,USD,JPY]
+        next_due_date:
+          type: string
+          format: date
+        billing_cycle:
+          type: string
+          enum: [daily,weekly,monthly,yearly]
+        is_paid_by_me:
+          type: boolean
+        student_status_expiry:
+          type: string
+          format: date
+          nullable: true
+        remind_to_cancel:
+          type: boolean
+        notes:
+          type: string
+      required: [id, name, price, next_due_date]
+    SubscriptionCreate:
+      type: object
+      required: [name, price, next_due_date]
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        next_due_date:
+          type: string
+          format: date
+        platform:
+          type: string
+        plan_type:
+          type: string
+          enum: [solo,duo,family,team]
+        currency:
+          type: string
+          enum: [PHP,USD,JPY]
+        billing_cycle:
+          type: string
+          enum: [daily,weekly,monthly,yearly]
+        tier:
+          type: string
+        is_paid_by_me:
+          type: boolean
+        student_status_expiry:
+          type: string
+          format: date
+        notes:
+          type: string
+    SubscriptionUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        next_due_date:
+          type: string
+          format: date
+        platform:
+          type: string
+        plan_type:
+          type: string
+        currency:
+          type: string
+        billing_cycle:
+          type: string
+        tier:
+          type: string
+        is_paid_by_me:
+          type: boolean
+        student_status_expiry:
+          type: string
+          format: date
+        remind_to_cancel:
+          type: boolean
+        notes:
+          type: string
+    TableEntry:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Name:
+          type: string
+        Price:
+          type: number
+        Billing_Date:
+          type: string
+        Next_Due_Date:
+          type: string
+    Summary:
+      type: object
+      properties:
+        monthly_total:
+          type: number
+        currency:
+          type: string
+        next_payment:
+          type: string
+        next_payment_date:
+          type: string
+          format: date
+        sub_count:
+          type: integer
+    Alerts:
+      type: object
+      properties:
+        urgent_reminders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        due_soon:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        student_expiry_reminders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
