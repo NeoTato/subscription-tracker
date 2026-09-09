@@ -53,6 +53,39 @@ class SubscriptionBase(BaseModel):
     student_status_expiry: Optional[date] = Field(None, description="Expiry date of educational/student discount")
     notes: Optional[str] = Field(None, description="Custom notes or details")
 
+    @field_validator("plan_type", mode="before")
+    @classmethod
+    def parse_plan_type(cls, v):
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"solo", "duo", "family", "team"}:
+                return v_clean
+        elif isinstance(v, PlanType):
+            return v.value
+        return "solo"
+
+    @field_validator("billing_cycle", mode="before")
+    @classmethod
+    def parse_billing_cycle(cls, v):
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"daily", "weekly", "monthly", "yearly"}:
+                return v_clean
+        elif isinstance(v, BillingCycle):
+            return v.value
+        return "monthly"
+
+    @field_validator("currency", mode="before")
+    @classmethod
+    def parse_currency(cls, v):
+        if isinstance(v, str):
+            v_clean = v.strip().upper()
+            if v_clean in {"PHP", "USD", "JPY", "EUR", "GBP", "SGD"}:
+                return v_clean
+        elif isinstance(v, Currency):
+            return v.value
+        return "PHP"
+
     @field_validator("student_status_expiry", mode="before")
     @classmethod
     def parse_student_expiry(cls, v):
@@ -80,6 +113,45 @@ class SubscriptionUpdate(BaseModel):
     remind_to_cancel: Optional[bool] = None
     student_status_expiry: Optional[date] = None
     notes: Optional[str] = None
+
+    @field_validator("plan_type", mode="before")
+    @classmethod
+    def parse_plan_type(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"solo", "duo", "family", "team"}:
+                return v_clean
+        elif isinstance(v, PlanType):
+            return v.value
+        return "solo"
+
+    @field_validator("billing_cycle", mode="before")
+    @classmethod
+    def parse_billing_cycle(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"daily", "weekly", "monthly", "yearly"}:
+                return v_clean
+        elif isinstance(v, BillingCycle):
+            return v.value
+        return "monthly"
+
+    @field_validator("currency", mode="before")
+    @classmethod
+    def parse_currency(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            v_clean = v.strip().upper()
+            if v_clean in {"PHP", "USD", "JPY", "EUR", "GBP", "SGD"}:
+                return v_clean
+        elif isinstance(v, Currency):
+            return v.value
+        return "PHP"
 
     @field_validator("student_status_expiry", mode="before")
     @classmethod
