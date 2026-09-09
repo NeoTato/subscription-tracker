@@ -92,7 +92,10 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
     let total = 0;
     for (const sub of filtered) {
       const cat = sub.category || "Other";
-      const monthlyPHP = toPHP(toMonthly(sub.price, sub.billing_cycle), sub.currency);
+      const monthlyPHP = toPHP(
+        toMonthly(sub.price, sub.billing_cycle),
+        sub.currency,
+      );
       total += monthlyPHP;
 
       if (!categoryMap[cat]) {
@@ -212,8 +215,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
             {scope === "SHARED"
               ? "No shared subscriptions tracked"
               : scope === "ME"
-              ? "No personal subscriptions tracked"
-              : "No subscriptions found"}
+                ? "No personal subscriptions tracked"
+                : "No subscriptions found"}
           </p>
           <p className="text-xs text-slate-500 mt-1 max-w-xs">
             {scope === "SHARED"
@@ -231,7 +234,10 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
         </div>
       ) : (
         <div className="flex-1 w-full min-h-[220px] pt-2">
-          <ResponsiveContainer width="100%" height={230}>
+          <ResponsiveContainer
+            width="100%"
+            height={230}
+          >
             <PieChart>
               <Pie
                 data={chartData}
