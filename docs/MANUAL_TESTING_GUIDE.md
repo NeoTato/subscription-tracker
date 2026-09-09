@@ -7,6 +7,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 1: Initial Launch & Empty State
 
 ### TC-01: Empty Dashboard State
+
 - **Objective**: Verify that the application gracefully loads when no subscriptions exist without throwing errors (`IndexError` or `NoneType`).
 - **Steps**:
   1. Open `http://127.0.0.1:8000/`.
@@ -23,6 +24,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 2: Subscription CRUD Operations
 
 ### TC-02: Add a Standard Monthly Subscription (PHP)
+
 - **Objective**: Verify creating a normal recurring subscription.
 - **Steps**:
   1. Click the **"Add Subscription"** button.
@@ -32,7 +34,7 @@ This document provides clear, step-by-step test cases to manually test and verif
      - **Price**: `159.00`
      - **Currency**: `PHP`
      - **Billing Cycle**: `Monthly`
-     - **Next Renewal Date**: *(Set to 15 days from today)*
+     - **Next Renewal Date**: _(Set to 15 days from today)_
      - **Category**: `Entertainment`
      - **Plan Structure**: `Solo`
      - **Payment Method**: `GCash`
@@ -48,6 +50,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-03: Add a Multi-Currency Annual Subscription (USD)
+
 - **Objective**: Verify foreign exchange normalization and annual cycle math.
 - **Steps**:
   1. Click **"Add Subscription"**.
@@ -57,7 +60,7 @@ This document provides clear, step-by-step test cases to manually test and verif
      - **Price**: `100.00`
      - **Currency**: `USD`
      - **Billing Cycle**: `Yearly`
-     - **Next Renewal Date**: *(Set to 6 months from today)*
+     - **Next Renewal Date**: _(Set to 6 months from today)_
      - **Category**: `Cloud & Dev`
      - **Plan Structure**: `Solo`
      - **Payment Method**: `Credit Card`
@@ -72,6 +75,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-04: Edit / Partial Update a Subscription
+
 - **Objective**: Verify partial field editing (`PATCH`).
 - **Steps**:
   1. In the Subscriptions Table, locate `YouTube Premium`.
@@ -85,10 +89,11 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-05: Delete a Subscription
+
 - **Objective**: Verify subscription removal.
 - **Steps**:
   1. In the table, click the **Trash** icon next to a subscription.
-  2. Confirm the browser dialog prompt (*"Are you sure you want to delete...?"*).
+  2. Confirm the browser dialog prompt (_"Are you sure you want to delete...?"_).
 - **Expected Result**:
   - Subscription is removed from the table.
   - Monthly total decreases by that subscription's normalized monthly cost.
@@ -98,6 +103,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 3: Smart Alerts & Proactive Notifications
 
 ### TC-06: Due-Soon Renewal Alert (< 7 Days)
+
 - **Objective**: Verify that subscriptions due within 7 days trigger warning banners.
 - **Steps**:
   1. Add or edit a subscription (e.g. `Netflix`) with **Next Renewal Date** set to **3 days from today**.
@@ -108,6 +114,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-07: Cancellation Reminder
+
 - **Objective**: Verify urgent cancellation reminder flags.
 - **Steps**:
   1. Add a subscription (e.g. `Free Trial Adobe`) with **Remind me to cancel** `Checked`.
@@ -119,6 +126,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-08: Student Status Expiry Reminder
+
 - **Objective**: Verify 30-day student discount expiration alerts.
 - **Steps**:
   1. Add a subscription (e.g. `Spotify Student`) with **Student Status Expiry** set to **20 days from today**.
@@ -130,6 +138,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 4: Table Searching & Filtering
 
 ### TC-09: Live Text Search
+
 - **Objective**: Verify real-time search across service names and platforms.
 - **Steps**:
   1. Type `you` into the search box.
@@ -140,6 +149,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-10: Category & Payee Dropdown Filters
+
 - **Objective**: Verify multi-attribute filtering.
 - **Steps**:
   1. Select **Category**: `Entertainment`.
@@ -153,6 +163,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 5: Date Rollover & Automation
 
 ### TC-11: Overdue Date Auto-Advancement
+
 - **Objective**: Verify that overdue dates automatically roll over to the next cycle.
 - **Steps**:
   1. Add a subscription with a **Monthly** cycle and a due date in the past (e.g., `2026-08-01`).
@@ -164,6 +175,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ---
 
 ### TC-12: Telegram Alert Trigger Test
+
 - **Objective**: Verify notification dispatch pipeline.
 - **Steps**:
   1. Click the **Bell (Alerts)** button in the top navigation bar.
@@ -176,6 +188,7 @@ This document provides clear, step-by-step test cases to manually test and verif
 ## Test Suite 6: Input Validation & Edge Cases
 
 ### TC-13: Validation on Invalid Input
+
 - **Objective**: Verify client and API validation on incorrect payloads.
 - **Steps**:
   1. Open "Add Subscription" modal.

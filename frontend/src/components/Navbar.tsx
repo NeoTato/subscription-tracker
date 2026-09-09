@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShieldCheck, Bell, RefreshCw } from 'lucide-react';
+import React from "react";
+import { ShieldCheck, Bell, RefreshCw } from "lucide-react";
 
 interface NavbarProps {
   onAddClick: () => void;
@@ -26,12 +26,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base sm:text-lg text-white tracking-tight">SubSentry</span>
+              <span className="font-bold text-base sm:text-lg text-white tracking-tight">
+                SubSentry
+              </span>
               <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20">
                 v2.0
               </span>
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">Intelligent Subscription Manager</p>
+            <p className="text-xs text-slate-400 hidden sm:block">
+              Intelligent Subscription Manager
+            </p>
           </div>
         </div>
 
@@ -43,7 +47,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             title="Refresh data and advance overdue dates"
             className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 transition disabled:opacity-50"
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-brand-400' : ''}`} />
+            <RefreshCw
+              className={`w-4 h-4 ${isRefreshing ? "animate-spin text-brand-400" : ""}`}
+            />
           </button>
 
           <button

@@ -406,14 +406,14 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-slate-400 hover:text-white transition"
+              className="px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 border border-transparent hover:border-slate-700 text-xs sm:text-sm font-medium transition active:scale-95"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-100 font-medium text-xs sm:text-sm border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95 disabled:opacity-50"
             >
               {isSubmitting
                 ? "Saving..."
