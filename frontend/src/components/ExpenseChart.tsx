@@ -1,7 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { CategoryBreakdown } from '../services/api';
-import { PieChart as PieIcon, Plus } from 'lucide-react';
+import { PieChart as PieIcon } from 'lucide-react';
 
 interface ExpenseChartProps {
   categories: CategoryBreakdown[];
@@ -25,12 +25,9 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({ categories, totalMon
         {onAddClick && (
           <button
             onClick={onAddClick}
-            className="mt-4 flex items-center gap-2 px-3.5 py-1.5 bg-slate-800/90 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95"
+            className="mt-4 px-4 py-2 bg-slate-800/90 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95"
           >
-            <div className="w-4 h-4 rounded bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400">
-              <Plus className="w-3 h-3" />
-            </div>
-            <span>Add Subscription</span>
+            Add Subscription
           </button>
         )}
       </div>

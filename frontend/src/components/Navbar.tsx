@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Plus, Bell, RefreshCw } from 'lucide-react';
+import { ShieldCheck, Bell, RefreshCw } from 'lucide-react';
 
 interface NavbarProps {
   onAddClick: () => void;
@@ -61,12 +61,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onAddClick}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-100 font-medium text-xs sm:text-sm border border-slate-700 hover:border-slate-600 transition active:scale-95 shadow-sm"
+            className="px-4 py-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-100 font-medium text-xs sm:text-sm border border-slate-700 hover:border-slate-600 transition active:scale-95 shadow-sm"
           >
-            <div className="w-5 h-5 rounded-md bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400">
-              <Plus className="w-3.5 h-3.5" />
-            </div>
-            <span>Add Subscription</span>
+            Add Subscription
           </button>
         </div>
       </div>
