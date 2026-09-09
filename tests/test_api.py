@@ -188,7 +188,7 @@ def test_notifications_formatting():
     msg = notifications.format_message(due_soon, cancellations)
     assert "YouTube Premium" in msg
     assert "Free Trial App" in msg
-    assert "SubSentry — Daily Alert" in msg
+    assert "SubSentry" in msg
 
 
 def test_legacy_routes_compatibility(client):

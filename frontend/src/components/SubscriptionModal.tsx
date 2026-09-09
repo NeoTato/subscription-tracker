@@ -580,7 +580,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
       name: defaultName,
       platform: preset.platform,
       category: preset.category,
-      payment_method: preset.defaultPaymentMethod || prev.payment_method || "GCash",
+      payment_method:
+        preset.defaultPaymentMethod || prev.payment_method || "GCash",
       tier: firstTier ? firstTier.tierLabel : "",
       price: firstTier ? firstTier.price : prev.price,
       currency: firstTier ? firstTier.currency : prev.currency,
@@ -610,7 +611,9 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
     setStreamerName(creator);
     if (currentPreset?.isStreamerSub) {
       const prefix = currentPreset.streamerPrefix || currentPreset.platform;
-      const formattedName = creator.trim() ? `${prefix} (${creator.trim()})` : prefix;
+      const formattedName = creator.trim()
+        ? `${prefix} (${creator.trim()})`
+        : prefix;
       setFormData((prev) => ({ ...prev, name: formattedName }));
     }
   };
@@ -683,7 +686,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                   <option value="custom">⚡ Custom / Manual Entry</option>
                   <optgroup label="Popular Subscriptions & Platforms">
                     {PRESET_SERVICES.map((p) => (
-                      <option key={p.id} value={p.id}>
+                      <option
+                        key={p.id}
+                        value={p.id}
+                      >
                         {p.name}
                       </option>
                     ))}
@@ -704,7 +710,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                       className="w-full px-3 py-1.5 bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-brand-500"
                     >
                       {currentPreset.tiers.map((t) => (
-                        <option key={t.id} value={t.id}>
+                        <option
+                          key={t.id}
+                          value={t.id}
+                        >
                           {t.name}
                         </option>
                       ))}
@@ -720,7 +729,9 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                         type="text"
                         placeholder="e.g. keipup, kiichan"
                         value={streamerName}
-                        onChange={(e) => handleStreamerNameChange(e.target.value)}
+                        onChange={(e) =>
+                          handleStreamerNameChange(e.target.value)
+                        }
                         className="w-full px-3 py-1.5 bg-slate-900 border border-slate-700/80 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
                       />
                     </div>
@@ -797,7 +808,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
               >
                 {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
+                  <option
+                    key={c}
+                    value={c}
+                  >
                     {c}
                   </option>
                 ))}
@@ -818,7 +832,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500 capitalize"
               >
                 {BILLING_CYCLES.map((c) => (
-                  <option key={c} value={c}>
+                  <option
+                    key={c}
+                    value={c}
+                  >
                     {c}
                   </option>
                 ))}
@@ -854,7 +871,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
               >
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
+                  <option
+                    key={c}
+                    value={c}
+                  >
                     {c}
                   </option>
                 ))}
@@ -876,7 +896,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500 capitalize"
               >
                 {PLAN_TYPES.map((p) => (
-                  <option key={p} value={p}>
+                  <option
+                    key={p}
+                    value={p}
+                  >
                     {p}
                   </option>
                 ))}
