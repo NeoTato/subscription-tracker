@@ -29,23 +29,23 @@ const getPlatformIcon = (platform?: string, name?: string): string | null => {
     n.includes("keipup") ||
     n.includes("kiichan")
   ) {
-    return "/icons/twitch.svg";
+    return "/icons/twitch_colored.svg";
   }
   if (p.includes("discord") || n.includes("discord") || n.includes("nitro")) {
-    return "/icons/discord.svg";
+    return "/icons/discord_colored.svg";
   }
   if (p.includes("spotify") || n.includes("spotify")) {
-    return "/icons/spotify.svg";
+    return "/icons/spotify_colored.svg";
   }
   if (
     p.includes("youtube") ||
     n.includes("youtube") ||
     n.includes("millie parfait")
   ) {
-    return "/icons/youtube.svg";
+    return "/icons/youtube_colored.svg";
   }
   if (p.includes("google") || n.includes("google") || n.includes("gdrive")) {
-    return "/icons/google.svg";
+    return "/icons/google_colored.svg";
   }
   return null;
 };
