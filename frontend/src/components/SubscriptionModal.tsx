@@ -413,7 +413,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-gradient-to-r from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50"
+              className="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg shadow-sm transition active:scale-95 disabled:opacity-50"
             >
               {isSubmitting
                 ? "Saving..."

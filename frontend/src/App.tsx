@@ -170,6 +170,7 @@ export function App() {
             <ExpenseChart
               categories={summary?.categories || []}
               totalMonthly={summary?.monthly_total || 0}
+              onAddClick={handleAddSubscription}
             />
           </div>
 
@@ -225,6 +226,7 @@ export function App() {
           subscriptions={subscriptions}
           onEdit={handleEditSubscription}
           onDelete={handleDeleteSubscription}
+          onAddClick={handleAddSubscription}
         />
       </main>
 
