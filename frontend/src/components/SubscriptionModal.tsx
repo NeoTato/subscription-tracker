@@ -101,7 +101,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         ...formData,
         price: Number(formData.price),
         student_status_expiry:
-          formData.student_status_expiry && formData.student_status_expiry.trim() !== ""
+          formData.student_status_expiry &&
+          formData.student_status_expiry.trim() !== ""
             ? formData.student_status_expiry
             : undefined,
         platform: formData.platform?.trim() || undefined,

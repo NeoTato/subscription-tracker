@@ -67,7 +67,10 @@ export interface AlertsResponse {
 
 const API_BASE = "/api/v1";
 
-async function handleResponse<T>(res: Response, defaultMessage: string): Promise<T> {
+async function handleResponse<T>(
+  res: Response,
+  defaultMessage: string,
+): Promise<T> {
   if (!res.ok) {
     let errorDetail = defaultMessage;
     try {
@@ -75,7 +78,10 @@ async function handleResponse<T>(res: Response, defaultMessage: string): Promise
       if (data?.detail) {
         if (Array.isArray(data.detail)) {
           errorDetail = data.detail
-            .map((item: any) => `${item.loc?.slice(1).join(".") || "field"}: ${item.msg}`)
+            .map(
+              (item: any) =>
+                `${item.loc?.slice(1).join(".") || "field"}: ${item.msg}`,
+            )
             .join("; ");
         } else if (typeof data.detail === "string") {
           errorDetail = data.detail;

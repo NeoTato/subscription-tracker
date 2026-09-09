@@ -36,6 +36,41 @@ class Subscription(Base):
     notes = Column(String, nullable=True)
 
 
+from sqlalchemy import inspect, text
+
+
+def init_db():
+    """Create tables and automatically apply schema migrations for missing columns."""
+    Base.metadata.create_all(bind=engine)
+    
+    with engine.connect() as conn:
+        inspector = inspect(engine)
+        if "subscriptions" in inspector.get_table_names():
+            existing_cols = {c["name"] for c in inspector.get_columns("subscriptions")}
+            
+            migrations = [
+                ("category", "VARCHAR DEFAULT 'Entertainment'"),
+                ("payment_method", "VARCHAR DEFAULT 'GCash'"),
+                ("is_paid_by_me", "BOOLEAN DEFAULT 1"),
+                ("remind_to_cancel", "BOOLEAN DEFAULT 0"),
+                ("student_status_expiry", "DATE"),
+                ("notes", "VARCHAR"),
+                ("platform", "VARCHAR"),
+                ("plan_type", "VARCHAR DEFAULT 'solo'"),
+                ("tier", "VARCHAR"),
+                ("currency", "VARCHAR DEFAULT 'PHP'"),
+                ("billing_cycle", "VARCHAR DEFAULT 'monthly'"),
+            ]
+            
+            for col_name, col_type in migrations:
+                if col_name not in existing_cols:
+                    try:
+                        conn.execute(text(f"ALTER TABLE subscriptions ADD COLUMN {col_name} {col_type}"))
+                        conn.commit()
+                    except Exception:
+                        pass
+
+
 def get_db():
     """FastAPI database session dependency."""
     db = SessionLocal()

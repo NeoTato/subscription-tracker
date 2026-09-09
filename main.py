@@ -36,8 +36,8 @@ def scheduled_daily_tasks():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure database schema exists
-    models.Base.metadata.create_all(bind=models.engine)
+    # Ensure database schema exists and auto-migrate any missing columns
+    models.init_db()
 
     # Initial check on startup
     scheduled_daily_tasks()
