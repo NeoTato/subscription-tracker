@@ -168,6 +168,7 @@ export function App() {
           {/* Spending Donut Chart */}
           <div className="lg:col-span-2">
             <ExpenseChart
+              subscriptions={subscriptions}
               categories={summary?.categories || []}
               totalMonthly={summary?.monthly_total || 0}
               onAddClick={handleAddSubscription}
