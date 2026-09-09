@@ -1,32 +1,45 @@
-from sqlalchemy import Column, Integer, String, Float, Date, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+import os
+from sqlalchemy import Column, Integer, String, Float, Date, Boolean, create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./subsentry.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./subsentry.db")
 
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    DATABASE_URL, 
+    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+
 class Subscription(Base):
     __tablename__ = "subscriptions"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)  # "YouTube Premium"
-    platform = Column(String)             # "YouTube", "Twitch"
-    plan_type = Column(String, nullable=False) # Solo, Duo, Team, Family
-    tier = Column(String) # Discord "Basic", Discord "Pro", Twitch "Tier 1 Sub" etc
-    price = Column(Float, nullable=False)  # 115.0
-    currency = Column(String, default="PHP")
+    name = Column(String, nullable=False)  # e.g., "YouTube Premium", "Netflix"
+    platform = Column(String, nullable=True)  # e.g., "Google", "Discord", "Twitch"
+    plan_type = Column(String, nullable=False, default="solo")  # solo, duo, family, team
+    tier = Column(String, nullable=True)  # e.g., "Basic", "Pro", "Tier 1"
+    category = Column(String, nullable=True, default="Entertainment")  # Entertainment, Productivity, Utilities, etc.
+    payment_method = Column(String, nullable=True)  # e.g., "GCash", "Maya", "Credit Card"
+    price = Column(Float, nullable=False)  # 159.0
+    currency = Column(String, default="PHP")  # PHP, USD, JPY, EUR, etc.
+    billing_cycle = Column(String, default="monthly")  # daily, weekly, monthly, yearly
     next_due_date = Column(Date, nullable=False)
-    billing_cycle = Column(String, default="monthly")
     
-    # other custom fields
-    is_paid_by_me = Column(Boolean, default=True) # Set to False for Spotify
-    student_status_expiry = Column(Date, nullable=True) # 
-    remind_to_cancel = Column(Boolean, default=False) # reminds cancel
+    # Custom tracking flags
+    is_paid_by_me = Column(Boolean, default=True)
+    remind_to_cancel = Column(Boolean, default=False)
+    student_status_expiry = Column(Date, nullable=True)
     notes = Column(String, nullable=True)
+
+
+def get_db():
+    """FastAPI database session dependency."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
