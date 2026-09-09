@@ -97,3 +97,4 @@ def delete_subscription(
     db.delete(sub)
     db.commit()
     return None
+

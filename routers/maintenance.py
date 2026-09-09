@@ -22,3 +22,4 @@ def manual_trigger_notifications(db: Session = Depends(models.get_db)):
     """Manually run alert check and dispatch Telegram notification."""
     result = notifications.check_and_notify(db)
     return {"status": "success", "result": result}
+

@@ -65,3 +65,4 @@ def legacy_delete_subscription(sub_id: int, db: Session = Depends(models.get_db)
     db.delete(sub)
     db.commit()
     return {"status": "Success", "message": f"Successfully deleted {sub.name} from subscription"}
+

@@ -116,3 +116,4 @@ def get_alerts(db: Session = Depends(models.get_db)):
         student_expiry_reminders=student_expiries,
         total_alerts=total_alerts,
     )
+
