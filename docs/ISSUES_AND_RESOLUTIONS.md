@@ -1,6 +1,6 @@
-# 🛠️ SubSentry — Issues, Root Causes & Resolutions
+# SubSentry — Issues, Root Causes & Resolutions
 
-This document catalogues the critical bugs, edge cases, and design improvements identified and resolved across **SubSentry**.
+This document catalogues the critical bugs, edge cases, and design improvements identified and resolved across SubSentry.
 
 ---
 
@@ -8,16 +8,16 @@ This document catalogues the critical bugs, edge cases, and design improvements 
 
 | ID | Category | Issue Description | Severity | Target Resolution |
 | :--- | :--- | :--- | :--- | :--- |
-| **ISS-01** | Runtime Crash | `NoneType` comparison crash on student expiry check in `/alerts` | 🔴 Critical | Added presence check before date comparison |
-| **ISS-02** | Runtime Crash | `IndexError` in `/summary` when database is empty | 🔴 Critical | Added safe empty-state fallback |
-| **ISS-03** | Schema Migration | Missing columns (`category`, `payment_method`) in pre-existing SQLite DBs | 🔴 Critical | Implemented `models.init_db()` auto-migration routine on startup |
-| **ISS-04** | Input Validation | Pydantic 422 Unprocessable Entity on mixed-case enum inputs | 🟡 High | Added `@field_validator` with `.strip().lower()` / `.upper()` normalization |
-| **ISS-05** | UI / Dark Theme | Solid black monochrome SVG icons blending into dark slate background | 🟡 High | Replaced with authentic multi-colored brand SVGs (Twitch purple, Discord blurple, etc.) |
-| **ISS-06** | Financial Analytics | Category breakdown conflated personal out-of-pocket vs shared/covered plans | 🟡 High | Added interactive Scope Toggle (`Paid by Me`, `Shared`, `Overall`) |
-| **ISS-07** | UX / Usability | Requirement to open VS Code, activate venv, and run terminal commands to launch | 🟡 High | Created 1-Click Desktop launchers (`start.bat`, `start_background.vbs`, `stop.bat`) |
-| **ISS-08** | Notification UX | Monolithic telegram alert was hard to parse quickly | 🟡 Medium | Upgraded to structured daily briefing with urgency badges and 7-day outflow summary |
-| **ISS-09** | Scheduling Flaw | Daily maintenance tasks executed only once on startup | 🟡 Medium | Integrated `APScheduler` async cron running daily at 09:00 AM |
-| **ISS-10** | REST Anti-Pattern | Query parameters used for update (`PUT /update/{id}`) | 🟡 Medium | Replaced with standard RESTful `PATCH /api/v1/subscriptions/{id}` with JSON body |
+| **ISS-01** | Runtime Crash | NoneType comparison crash on student expiry check in `/alerts` | Critical | Added presence check before date comparison |
+| **ISS-02** | Runtime Crash | IndexError in `/summary` when database is empty | Critical | Added safe empty-state fallback |
+| **ISS-03** | Schema Migration | Missing columns (category, payment_method) in pre-existing SQLite DBs | Critical | Implemented `models.init_db()` auto-migration routine on startup |
+| **ISS-04** | Input Validation | Pydantic 422 Unprocessable Entity on mixed-case enum inputs | High | Added `@field_validator` with `.strip().lower()` / `.upper()` normalization |
+| **ISS-05** | UI / Dark Theme | Solid black monochrome SVG icons blending into dark slate background | High | Replaced with authentic multi-colored brand SVGs (Twitch purple, Discord blurple, etc.) |
+| **ISS-06** | Financial Analytics | Category breakdown conflated personal out-of-pocket vs shared/covered plans | High | Added interactive Scope Toggle (`Paid by Me`, `Shared`, `Overall`) |
+| **ISS-07** | UX / Usability | Requirement to open VS Code, activate venv, and run terminal commands to launch | High | Created 1-Click Desktop launchers (`start.bat`, `start_background.vbs`, `stop.bat`) |
+| **ISS-08** | Notification UX | Monolithic telegram alert was hard to parse quickly | Medium | Upgraded to structured daily briefing with urgency badges and 7-day outflow summary |
+| **ISS-09** | Scheduling Flaw | Daily maintenance tasks executed only once on startup | Medium | Integrated `APScheduler` async cron running daily at 09:00 AM |
+| **ISS-10** | REST Anti-Pattern | Query parameters used for update (`PUT /update/{id}`) | Medium | Replaced with standard RESTful `PATCH /api/v1/subscriptions/{id}` with JSON body |
 
 ---
 
