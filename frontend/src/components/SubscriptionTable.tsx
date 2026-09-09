@@ -19,6 +19,61 @@ interface SubscriptionTableProps {
   onAddClick?: () => void;
 }
 
+const getPlatformIcon = (platform?: string, name?: string): string | null => {
+  const p = (platform || "").toLowerCase();
+  const n = (name || "").toLowerCase();
+
+  if (
+    p.includes("twitch") ||
+    n.includes("twitch") ||
+    n.includes("keipup") ||
+    n.includes("kiichan")
+  ) {
+    return "/icons/twitch.svg";
+  }
+  if (p.includes("discord") || n.includes("discord") || n.includes("nitro")) {
+    return "/icons/discord.svg";
+  }
+  if (p.includes("spotify") || n.includes("spotify")) {
+    return "/icons/spotify.svg";
+  }
+  if (
+    p.includes("youtube") ||
+    n.includes("youtube") ||
+    n.includes("millie parfait")
+  ) {
+    return "/icons/youtube.svg";
+  }
+  if (p.includes("google") || n.includes("google") || n.includes("gdrive")) {
+    return "/icons/google.svg";
+  }
+  return null;
+};
+
+const PlatformAvatar: React.FC<{ sub: Subscription }> = ({ sub }) => {
+  const [imgFailed, setImgFailed] = useState(false);
+  const iconUrl = getPlatformIcon(sub.platform, sub.name);
+
+  if (iconUrl && !imgFailed) {
+    return (
+      <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700 shadow-sm shrink-0">
+        <img
+          src={iconUrl}
+          alt={sub.platform || sub.name}
+          className="w-full h-full object-contain"
+          onError={() => setImgFailed(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center font-bold text-brand-400 text-sm border border-slate-700 shrink-0 shadow-sm">
+      {sub.name.charAt(0).toUpperCase()}
+    </div>
+  );
+};
+
 export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   subscriptions,
   onEdit,
@@ -183,9 +238,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     {/* Name / Platform */}
                     <td className="py-3.5 px-4 font-medium">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center font-bold text-brand-400 text-sm border border-slate-700">
-                          {sub.name.charAt(0).toUpperCase()}
-                        </div>
+                        <PlatformAvatar sub={sub} />
                         <div>
                           <div className="text-white font-semibold flex items-center gap-1.5">
                             {sub.name}
