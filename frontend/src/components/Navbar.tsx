@@ -21,8 +21,8 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-brand-600 flex items-center justify-center shadow-sm">
-            <ShieldCheck className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center shadow-sm">
+            <ShieldCheck className="w-5 h-5 text-brand-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onRefresh}
             disabled={isRefreshing}
             title="Refresh data and advance overdue dates"
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition border border-slate-800 hover:border-slate-700 disabled:opacity-50"
+            className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 transition disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-brand-400' : ''}`} />
           </button>
@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onTriggerAlerts}
             title="Dispatch Telegram Notification"
-            className="relative p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition border border-slate-800 hover:border-slate-700"
+            className="relative p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 transition"
           >
             <Bell className="w-4 h-4" />
             {alertCount > 0 && (
@@ -61,9 +61,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onAddClick}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm shadow-sm transition active:scale-95"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-100 font-medium text-xs sm:text-sm border border-slate-700 hover:border-slate-600 transition active:scale-95 shadow-sm"
           >
-            <Plus className="w-4 h-4" />
+            <div className="w-5 h-5 rounded-md bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400">
+              <Plus className="w-3.5 h-3.5" />
+            </div>
             <span>Add Subscription</span>
           </button>
         </div>

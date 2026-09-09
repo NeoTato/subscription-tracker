@@ -15,7 +15,7 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({ categories, totalMon
   if (!categories || categories.length === 0) {
     return (
       <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col items-center justify-center text-center h-[320px]">
-        <div className="p-3 rounded-full bg-slate-800 text-slate-400 mb-2">
+        <div className="p-3 rounded-full bg-slate-800 text-slate-400 mb-2 border border-slate-700/60">
           <PieIcon className="w-6 h-6" />
         </div>
         <p className="text-sm font-medium text-slate-200">No expense breakdown data</p>
@@ -25,9 +25,11 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({ categories, totalMon
         {onAddClick && (
           <button
             onClick={onAddClick}
-            className="mt-4 px-3.5 py-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-lg shadow-sm transition active:scale-95 flex items-center gap-1.5"
+            className="mt-4 flex items-center gap-2 px-3.5 py-1.5 bg-slate-800/90 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <div className="w-4 h-4 rounded bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-brand-400">
+              <Plus className="w-3 h-3" />
+            </div>
             <span>Add Subscription</span>
           </button>
         )}
