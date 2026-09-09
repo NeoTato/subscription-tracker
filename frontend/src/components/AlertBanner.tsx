@@ -1,13 +1,22 @@
-import React from 'react';
-import { AlertCircle, Clock, GraduationCap, X, CheckCircle2 } from 'lucide-react';
-import { AlertsResponse } from '../services/api';
+import React from "react";
+import {
+  AlertCircle,
+  Clock,
+  GraduationCap,
+  X,
+  CheckCircle2,
+} from "lucide-react";
+import { AlertsResponse } from "../services/api";
 
 interface AlertBannerProps {
   alerts: AlertsResponse | null;
   onDismissReminder?: (id: number) => void;
 }
 
-export const AlertBanner: React.FC<AlertBannerProps> = ({ alerts, onDismissReminder }) => {
+export const AlertBanner: React.FC<AlertBannerProps> = ({
+  alerts,
+  onDismissReminder,
+}) => {
   if (!alerts || alerts.total_alerts === 0) return null;
 
   return (
@@ -30,7 +39,9 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({ alerts, onDismissRemin
                 </span>
               </div>
               <p className="text-xs text-rose-300/80 mt-0.5">
-                You marked this to be cancelled before next renewal. Current cost: {sub.currency} {sub.price.toFixed(2)} / {sub.billing_cycle}.
+                You marked this to be cancelled before next renewal. Current
+                cost: {sub.currency} {sub.price.toFixed(2)} /{" "}
+                {sub.billing_cycle}.
               </p>
             </div>
           </div>
@@ -59,11 +70,16 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({ alerts, onDismissRemin
               <div className="font-semibold text-white flex items-center gap-2">
                 <span>Payment Due Soon: {due.name}</span>
                 <span className="text-xs font-medium px-2 py-0.5 rounded bg-amber-500/30 text-amber-200 border border-amber-500/40">
-                  {due.days_left === 0 ? 'Due Today' : due.days_left === 1 ? 'Due Tomorrow' : `In ${due.days_left} days`}
+                  {due.days_left === 0
+                    ? "Due Today"
+                    : due.days_left === 1
+                      ? "Due Tomorrow"
+                      : `In ${due.days_left} days`}
                 </span>
               </div>
               <p className="text-xs text-amber-300/80 mt-0.5">
-                {due.currency} {due.price.toFixed(2)} ({due.billing_cycle}) due on {new Date(due.next_due_date).toLocaleDateString()}
+                {due.currency} {due.price.toFixed(2)} ({due.billing_cycle}) due
+                on {new Date(due.next_due_date).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -88,7 +104,9 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({ alerts, onDismissRemin
                 </span>
               </div>
               <p className="text-xs text-purple-300/80 mt-0.5">
-                Discount status expires on {new Date(exp.student_status_expiry).toLocaleDateString()}. Re-verify your student credentials to maintain discount.
+                Discount status expires on{" "}
+                {new Date(exp.student_status_expiry).toLocaleDateString()}.
+                Re-verify your student credentials to maintain discount.
               </p>
             </div>
           </div>

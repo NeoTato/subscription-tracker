@@ -1,12 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Navbar } from './components/Navbar';
-import { KPIOverview } from './components/KPIOverview';
-import { AlertBanner } from './components/AlertBanner';
-import { ExpenseChart } from './components/ExpenseChart';
-import { SubscriptionTable } from './components/SubscriptionTable';
-import { SubscriptionModal } from './components/SubscriptionModal';
-import { api, SummaryResponse, AlertsResponse, Subscription, SubscriptionCreate } from './services/api';
-import { CalendarDays, Sparkles, CheckCircle2, ShieldAlert } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from "react";
+import { Navbar } from "./components/Navbar";
+import { KPIOverview } from "./components/KPIOverview";
+import { AlertBanner } from "./components/AlertBanner";
+import { ExpenseChart } from "./components/ExpenseChart";
+import { SubscriptionTable } from "./components/SubscriptionTable";
+import { SubscriptionModal } from "./components/SubscriptionModal";
+import {
+  api,
+  SummaryResponse,
+  AlertsResponse,
+  Subscription,
+  SubscriptionCreate,
+} from "./services/api";
+import {
+  CalendarDays,
+  Sparkles,
+  CheckCircle2,
+  ShieldAlert,
+} from "lucide-react";
 
 export function App() {
   const [summary, setSummary] = useState<SummaryResponse | null>(null);
@@ -38,7 +49,7 @@ export function App() {
       setAlerts(alertData);
       setSubscriptions(subsData);
     } catch (err: any) {
-      console.error('Failed to load data:', err);
+      console.error("Failed to load data:", err);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -54,9 +65,9 @@ export function App() {
     try {
       await api.advanceDates();
       await loadData();
-      showToast('Data refreshed and overdue dates synced!');
+      showToast("Data refreshed and overdue dates synced!");
     } catch (err: any) {
-      showToast('Error syncing dates: ' + err.message);
+      showToast("Error syncing dates: " + err.message);
       setIsRefreshing(false);
     }
   };
@@ -65,14 +76,16 @@ export function App() {
     try {
       const res = await api.triggerNotification();
       if (res?.result?.notification_sent) {
-        showToast('Telegram notification dispatched successfully! 🚀');
+        showToast("Telegram notification dispatched successfully! 🚀");
       } else if (res?.result?.has_alerts) {
-        showToast('Alerts checked (configure Telegram Bot Token in .env to receive messages).');
+        showToast(
+          "Alerts checked (configure Telegram Bot Token in .env to receive messages).",
+        );
       } else {
-        showToast('No active alerts or renewals due this week.');
+        showToast("No active alerts or renewals due this week.");
       }
     } catch (err: any) {
-      showToast('Failed to trigger notification: ' + err.message);
+      showToast("Failed to trigger notification: " + err.message);
     }
   };
 
@@ -100,20 +113,20 @@ export function App() {
   const handleDeleteSubscription = async (id: number) => {
     try {
       await api.deleteSubscription(id);
-      showToast('Subscription removed.');
+      showToast("Subscription removed.");
       await loadData();
     } catch (err: any) {
-      showToast('Failed to delete: ' + err.message);
+      showToast("Failed to delete: " + err.message);
     }
   };
 
   const handleDismissReminder = async (id: number) => {
     try {
       await api.updateSubscription(id, { remind_to_cancel: false });
-      showToast('Cancellation reminder turned off.');
+      showToast("Cancellation reminder turned off.");
       await loadData();
     } catch (err: any) {
-      showToast('Failed to update: ' + err.message);
+      showToast("Failed to update: " + err.message);
     }
   };
 
@@ -139,10 +152,16 @@ export function App() {
       {/* Main Content */}
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 flex-1">
         {/* KPI Metrics */}
-        <KPIOverview summary={summary} alertCount={alerts?.total_alerts || 0} />
+        <KPIOverview
+          summary={summary}
+          alertCount={alerts?.total_alerts || 0}
+        />
 
         {/* Active Alert Banners */}
-        <AlertBanner alerts={alerts} onDismissReminder={handleDismissReminder} />
+        <AlertBanner
+          alerts={alerts}
+          onDismissReminder={handleDismissReminder}
+        />
 
         {/* Analytics & Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -165,22 +184,28 @@ export function App() {
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-400 mt-1.5 shrink-0" />
                   <span>
-                    Your normalized annual recurring expense is{' '}
+                    Your normalized annual recurring expense is{" "}
                     <strong className="text-white font-semibold">
-                      ₱{(summary?.annual_total || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })}
-                    </strong>.
+                      ₱
+                      {(summary?.annual_total || 0).toLocaleString("en-US", {
+                        maximumFractionDigits: 0,
+                      })}
+                    </strong>
+                    .
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
                   <span>
-                    Automatic daily rollover updates renewal dates seamlessly every day at 9:00 AM.
+                    Automatic daily rollover updates renewal dates seamlessly
+                    every day at 9:00 AM.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
                   <span>
-                    Multi-currency normalization automatically standardizes USD, JPY, and EUR into Philippine Pesos (PHP).
+                    Multi-currency normalization automatically standardizes USD,
+                    JPY, and EUR into Philippine Pesos (PHP).
                   </span>
                 </li>
               </ul>
@@ -188,7 +213,9 @@ export function App() {
 
             <div className="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between text-[11px] text-slate-500">
               <span>Database: SQLite</span>
-              <span className="text-brand-400 font-mono">FastAPI REST Backend</span>
+              <span className="text-brand-400 font-mono">
+                FastAPI REST Backend
+              </span>
             </div>
           </div>
         </div>
@@ -211,7 +238,8 @@ export function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
-        SubSentry &copy; {new Date().getFullYear()} · Intelligent Personal Subscription Tracker
+        SubSentry &copy; {new Date().getFullYear()} · Intelligent Personal
+        Subscription Tracker
       </footer>
     </div>
   );

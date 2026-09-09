@@ -68,9 +68,18 @@ app.add_middleware(
 )
 
 
-# --- Home & Metadata ---
+from fastapi.responses import HTMLResponse, FileResponse
+import os
+
+frontend_dist = os.path.join(os.path.dirname(__file__), "frontend", "dist")
+
+# --- Home & Web App Entrypoint ---
 @app.get("/", response_class=HTMLResponse, tags=["General"])
 def home():
+    index_file = os.path.join(frontend_dist, "index.html")
+    if os.path.isfile(index_file):
+        return FileResponse(index_file)
+
     return """
     <!DOCTYPE html>
     <html>
@@ -102,6 +111,7 @@ def home():
     </body>
     </html>
     """
+
 
 
 # ==========================================
@@ -386,3 +396,14 @@ def legacy_delete_subscription(sub_id: int, db: Session = Depends(models.get_db)
     db.delete(sub)
     db.commit()
     return {"status": "Success", "message": f"Successfully deleted {sub.name} from subscription"}
+
+
+# ==========================================
+# 🖥️ Serve React SPA Frontend (if built)
+# ==========================================
+import os
+from fastapi.staticfiles import StaticFiles
+
+frontend_dist = os.path.join(os.path.dirname(__file__), "frontend", "dist")
+if os.path.isdir(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
