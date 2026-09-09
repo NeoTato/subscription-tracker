@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from datetime import date
 from typing import Optional, List, Any
 
@@ -53,6 +53,13 @@ class SubscriptionBase(BaseModel):
     student_status_expiry: Optional[date] = Field(None, description="Expiry date of educational/student discount")
     notes: Optional[str] = Field(None, description="Custom notes or details")
 
+    @field_validator("student_status_expiry", mode="before")
+    @classmethod
+    def parse_student_expiry(cls, v):
+        if v == "" or v is None:
+            return None
+        return v
+
 
 class SubscriptionCreate(SubscriptionBase):
     pass
@@ -73,6 +80,13 @@ class SubscriptionUpdate(BaseModel):
     remind_to_cancel: Optional[bool] = None
     student_status_expiry: Optional[date] = None
     notes: Optional[str] = None
+
+    @field_validator("student_status_expiry", mode="before")
+    @classmethod
+    def parse_student_expiry(cls, v):
+        if v == "" or v is None:
+            return None
+        return v
 
 
 class SubscriptionResponse(SubscriptionBase):

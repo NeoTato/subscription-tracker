@@ -67,17 +67,42 @@ export interface AlertsResponse {
 
 const API_BASE = "/api/v1";
 
+async function handleResponse<T>(res: Response, defaultMessage: string): Promise<T> {
+  if (!res.ok) {
+    let errorDetail = defaultMessage;
+    try {
+      const data = await res.json();
+      if (data?.detail) {
+        if (Array.isArray(data.detail)) {
+          errorDetail = data.detail
+            .map((item: any) => `${item.loc?.slice(1).join(".") || "field"}: ${item.msg}`)
+            .join("; ");
+        } else if (typeof data.detail === "string") {
+          errorDetail = data.detail;
+        } else {
+          errorDetail = JSON.stringify(data.detail);
+        }
+      }
+    } catch {
+      errorDetail = `${defaultMessage} (${res.status} ${res.statusText})`;
+    }
+    throw new Error(errorDetail);
+  }
+  if (res.status === 204) {
+    return {} as T;
+  }
+  return res.json();
+}
+
 export const api = {
   async getSummary(): Promise<SummaryResponse> {
     const res = await fetch(`${API_BASE}/analytics/summary`);
-    if (!res.ok) throw new Error("Failed to fetch summary");
-    return res.json();
+    return handleResponse<SummaryResponse>(res, "Failed to fetch summary");
   },
 
   async getAlerts(): Promise<AlertsResponse> {
     const res = await fetch(`${API_BASE}/analytics/alerts`);
-    if (!res.ok) throw new Error("Failed to fetch alerts");
-    return res.json();
+    return handleResponse<AlertsResponse>(res, "Failed to fetch alerts");
   },
 
   async getSubscriptions(params?: {
@@ -92,8 +117,7 @@ export const api = {
     if (params?.search) query.append("search", params.search);
 
     const res = await fetch(`${API_BASE}/subscriptions?${query.toString()}`);
-    if (!res.ok) throw new Error("Failed to fetch subscriptions");
-    return res.json();
+    return handleResponse<Subscription[]>(res, "Failed to fetch subscriptions");
   },
 
   async createSubscription(data: SubscriptionCreate): Promise<Subscription> {
@@ -102,8 +126,7 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to create subscription");
-    return res.json();
+    return handleResponse<Subscription>(res, "Failed to create subscription");
   },
 
   async updateSubscription(
@@ -115,30 +138,30 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to update subscription");
-    return res.json();
+    return handleResponse<Subscription>(res, "Failed to update subscription");
   },
 
   async deleteSubscription(id: number): Promise<void> {
     const res = await fetch(`${API_BASE}/subscriptions/${id}`, {
       method: "DELETE",
     });
-    if (!res.ok) throw new Error("Failed to delete subscription");
+    return handleResponse<void>(res, "Failed to delete subscription");
   },
 
   async advanceDates(): Promise<{ message: string; updated_count: number }> {
     const res = await fetch(`${API_BASE}/analytics/advance-dates`, {
       method: "POST",
     });
-    if (!res.ok) throw new Error("Failed to advance dates");
-    return res.json();
+    return handleResponse<{ message: string; updated_count: number }>(
+      res,
+      "Failed to advance dates",
+    );
   },
 
   async triggerNotification(): Promise<any> {
     const res = await fetch(`${API_BASE}/notifications/trigger`, {
       method: "POST",
     });
-    if (!res.ok) throw new Error("Failed to trigger notification");
-    return res.json();
+    return handleResponse<any>(res, "Failed to trigger notification");
   },
 };

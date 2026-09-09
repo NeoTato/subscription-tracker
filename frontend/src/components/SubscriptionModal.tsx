@@ -99,9 +99,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
       setIsSubmitting(true);
       await onSubmit({
         ...formData,
-        student_status_expiry: formData.student_status_expiry
-          ? formData.student_status_expiry
-          : undefined,
+        price: Number(formData.price),
+        student_status_expiry:
+          formData.student_status_expiry && formData.student_status_expiry.trim() !== ""
+            ? formData.student_status_expiry
+            : undefined,
+        platform: formData.platform?.trim() || undefined,
+        tier: formData.tier?.trim() || undefined,
+        payment_method: formData.payment_method?.trim() || undefined,
+        notes: formData.notes?.trim() || undefined,
       });
       onClose();
     } catch (err: any) {
