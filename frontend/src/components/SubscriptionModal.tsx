@@ -610,7 +610,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
     }
   }, [editingSubscription, isOpen]);
 
-    // Handle Escape key to close modal (R-32)
+  // Handle Escape key to close modal (R-32)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
