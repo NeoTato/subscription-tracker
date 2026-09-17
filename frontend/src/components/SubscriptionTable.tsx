@@ -116,7 +116,10 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   };
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div
+      className="relative inline-block text-left"
+      ref={dropdownRef}
+    >
       {/* Trigger Button */}
       <button
         type="button"
@@ -295,7 +298,10 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
-              <option key={c} value={c}>
+              <option
+                key={c}
+                value={c}
+              >
                 {c}
               </option>
             ))}
