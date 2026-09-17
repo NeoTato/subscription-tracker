@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Search,
   Edit2,
@@ -11,6 +11,7 @@ import {
   PackageOpen,
   PauseCircle,
   ChevronDown,
+  Check,
 } from "lucide-react";
 import { Subscription } from "../services/api";
 
@@ -78,6 +79,109 @@ const PlatformAvatar: React.FC<{ sub: Subscription }> = ({ sub }) => {
   );
 };
 
+// Custom Interactive Status Dropdown Popover Component
+interface StatusDropdownProps {
+  currentStatus: "active" | "paused";
+  onSelect: (newStatus: "active" | "paused") => void;
+}
+
+const StatusDropdown: React.FC<StatusDropdownProps> = ({
+  currentStatus,
+  onSelect,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const isPaused = currentStatus === "paused";
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleChoose = (status: "active" | "paused") => {
+    onSelect(status);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`inline-flex items-center gap-1.5 pl-2.5 pr-2 py-1 text-[11px] font-semibold rounded-lg border transition shadow-sm ${
+          isPaused
+            ? "bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50"
+            : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20 hover:border-emerald-500/50"
+        }`}
+      >
+        {isPaused ? (
+          <PauseCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+        ) : (
+          <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+        )}
+        <span className="capitalize">{currentStatus}</span>
+        <ChevronDown
+          className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {/* Floating Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute left-0 mt-1.5 w-32 rounded-xl bg-slate-900 border border-slate-700 shadow-xl shadow-black/60 p-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+          {/* Active Option */}
+          <button
+            type="button"
+            onClick={() => handleChoose("active")}
+            className={`w-full flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg transition font-medium ${
+              !isPaused
+                ? "bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-500/30"
+                : "text-slate-300 hover:bg-emerald-500/15 hover:text-emerald-300"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Active</span>
+            </div>
+            {!isPaused && <Check className="w-3 h-3 text-emerald-400" />}
+          </button>
+
+          {/* Paused Option */}
+          <button
+            type="button"
+            onClick={() => handleChoose("paused")}
+            className={`w-full flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg transition font-medium mt-0.5 ${
+              isPaused
+                ? "bg-amber-500/15 text-amber-300 font-semibold border border-amber-500/30"
+                : "text-slate-300 hover:bg-amber-500/15 hover:text-amber-300"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <PauseCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span>Paused</span>
+            </div>
+            {isPaused && <Check className="w-3 h-3 text-amber-400" />}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   subscriptions,
   onEdit,
@@ -135,7 +239,10 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
     }
   };
 
-  const handleStatusSelect = (sub: Subscription, newStatus: "active" | "paused") => {
+  const handleStatusSelect = (
+    sub: Subscription,
+    newStatus: "active" | "paused",
+  ) => {
     if (onStatusChange) {
       onStatusChange(sub, newStatus);
     } else if (onTogglePause) {
@@ -304,7 +411,9 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     <td className="py-3.5 px-4">
                       <div
                         className={`font-semibold ${
-                          isPaused ? "text-slate-400 line-through" : "text-white"
+                          isPaused
+                            ? "text-slate-400 line-through"
+                            : "text-white"
                         }`}
                       >
                         {sub.currency} {sub.price.toFixed(2)}
@@ -375,52 +484,23 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                       </div>
                     </td>
 
-                    {/* Interactive Status Dropdown Column */}
+                    {/* Interactive Custom Status Dropdown Popover */}
                     <td className="py-3.5 px-4">
                       <div className="flex flex-col gap-1 items-start">
-                        <div className="relative inline-flex items-center">
-                          <select
-                            value={sub.status || "active"}
-                            onChange={(e) =>
-                              handleStatusSelect(
-                                sub,
-                                e.target.value as "active" | "paused",
-                              )
-                            }
-                            className={`appearance-none pl-6 pr-6 py-1 text-[11px] font-semibold rounded-lg border cursor-pointer transition focus:outline-none focus:ring-1 ${
-                              isPaused
-                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30 hover:border-amber-500/50 focus:ring-amber-500/40"
-                                : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:border-emerald-500/50 focus:ring-emerald-500/40"
-                            }`}
-                          >
-                            <option
-                              value="active"
-                              className="bg-slate-900 text-emerald-400 font-medium"
-                            >
-                              Active
-                            </option>
-                            <option
-                              value="paused"
-                              className="bg-slate-900 text-amber-400 font-medium"
-                            >
-                              Paused
-                            </option>
-                          </select>
-                          {/* Status indicator icon inside select */}
-                          <span className="absolute left-2 pointer-events-none">
-                            {isPaused ? (
-                              <PauseCircle className="w-3 h-3 text-amber-400" />
-                            ) : (
-                              <CheckCircle className="w-3 h-3 text-emerald-400" />
-                            )}
-                          </span>
-                          {/* Dropdown arrow */}
-                          <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 pointer-events-none" />
-                        </div>
+                        <StatusDropdown
+                          currentStatus={
+                            (sub.status || "active") as "active" | "paused"
+                          }
+                          onSelect={(newStatus) =>
+                            handleStatusSelect(sub, newStatus)
+                          }
+                        />
 
                         {/* Payee Subtext */}
                         <span className="text-[10px] text-slate-500">
-                          {sub.is_paid_by_me ? "Paid by me" : "Shared / Covered"}
+                          {sub.is_paid_by_me
+                            ? "Paid by me"
+                            : "Shared / Covered"}
                         </span>
                       </div>
                     </td>
