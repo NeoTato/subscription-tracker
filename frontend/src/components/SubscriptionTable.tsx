@@ -10,9 +10,7 @@ import {
   AlertCircle,
   PackageOpen,
   PauseCircle,
-  PlayCircle,
-  Pause,
-  Play,
+  ChevronDown,
 } from "lucide-react";
 import { Subscription } from "../services/api";
 
@@ -20,6 +18,7 @@ interface SubscriptionTableProps {
   subscriptions: Subscription[];
   onEdit: (sub: Subscription) => void;
   onDelete: (id: number) => void;
+  onStatusChange?: (sub: Subscription, newStatus: "active" | "paused") => void;
   onTogglePause?: (sub: Subscription) => void;
   onAddClick?: () => void;
 }
@@ -83,6 +82,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   subscriptions,
   onEdit,
   onDelete,
+  onStatusChange,
   onTogglePause,
   onAddClick,
 }) => {
@@ -135,6 +135,14 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
     }
   };
 
+  const handleStatusSelect = (sub: Subscription, newStatus: "active" | "paused") => {
+    if (onStatusChange) {
+      onStatusChange(sub, newStatus);
+    } else if (onTogglePause) {
+      onTogglePause(sub);
+    }
+  };
+
   return (
     <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
       {/* Table Header Controls */}
@@ -180,10 +188,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
-              <option
-                key={c}
-                value={c}
-              >
+              <option key={c} value={c}>
                 {c}
               </option>
             ))}
@@ -260,7 +265,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                   <tr
                     key={sub.id}
                     className={`hover:bg-slate-800/40 transition group ${
-                      isPaused ? "opacity-75 bg-slate-950/20" : ""
+                      isPaused ? "opacity-80 bg-slate-950/20" : ""
                     }`}
                   >
                     {/* Name / Platform */}
@@ -276,11 +281,6 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                             >
                               {sub.name}
                             </span>
-                            {isPaused && (
-                              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px] font-medium border border-amber-500/20">
-                                Paused
-                              </span>
-                            )}
                             {!isPaused && sub.remind_to_cancel && (
                               <span
                                 className="p-0.5 rounded bg-rose-500/20 text-rose-400"
@@ -303,10 +303,17 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     {/* Cost */}
                     <td className="py-3.5 px-4">
                       <div
-                        className={`font-semibold ${isPaused ? "text-slate-400" : "text-white"}`}
+                        className={`font-semibold ${
+                          isPaused ? "text-slate-400 line-through" : "text-white"
+                        }`}
                       >
                         {sub.currency} {sub.price.toFixed(2)}
                       </div>
+                      {isPaused && (
+                        <div className="text-[10px] text-amber-400/80 font-normal">
+                          Excluded from spend
+                        </div>
+                      )}
                     </td>
 
                     {/* Billing Cycle */}
@@ -334,7 +341,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                           }
                         >
                           {isPaused
-                            ? `Paused (${new Date(
+                            ? `On hold (${new Date(
                                 sub.next_due_date,
                               ).toLocaleDateString("en-US", {
                                 month: "short",
@@ -368,51 +375,59 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                       </div>
                     </td>
 
-                    {/* Status */}
+                    {/* Interactive Status Dropdown Column */}
                     <td className="py-3.5 px-4">
-                      <div className="flex flex-col gap-1">
-                        {isPaused ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-amber-400">
-                            <PauseCircle className="w-3 h-3" /> Paused
+                      <div className="flex flex-col gap-1 items-start">
+                        <div className="relative inline-flex items-center">
+                          <select
+                            value={sub.status || "active"}
+                            onChange={(e) =>
+                              handleStatusSelect(
+                                sub,
+                                e.target.value as "active" | "paused",
+                              )
+                            }
+                            className={`appearance-none pl-6 pr-6 py-1 text-[11px] font-semibold rounded-lg border cursor-pointer transition focus:outline-none focus:ring-1 ${
+                              isPaused
+                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30 hover:border-amber-500/50 focus:ring-amber-500/40"
+                                : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:border-emerald-500/50 focus:ring-emerald-500/40"
+                            }`}
+                          >
+                            <option
+                              value="active"
+                              className="bg-slate-900 text-emerald-400 font-medium"
+                            >
+                              Active
+                            </option>
+                            <option
+                              value="paused"
+                              className="bg-slate-900 text-amber-400 font-medium"
+                            >
+                              Paused
+                            </option>
+                          </select>
+                          {/* Status indicator icon inside select */}
+                          <span className="absolute left-2 pointer-events-none">
+                            {isPaused ? (
+                              <PauseCircle className="w-3 h-3 text-amber-400" />
+                            ) : (
+                              <CheckCircle className="w-3 h-3 text-emerald-400" />
+                            )}
                           </span>
-                        ) : sub.is_paid_by_me ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400">
-                            <CheckCircle className="w-3 h-3" /> Active (Paid)
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                            Active (Shared)
-                          </span>
-                        )}
+                          {/* Dropdown arrow */}
+                          <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 pointer-events-none" />
+                        </div>
+
+                        {/* Payee Subtext */}
+                        <span className="text-[10px] text-slate-500">
+                          {sub.is_paid_by_me ? "Paid by me" : "Shared / Covered"}
+                        </span>
                       </div>
                     </td>
 
                     {/* Actions */}
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition">
-                        {/* 1-Click Pause/Resume Button */}
-                        {onTogglePause && (
-                          <button
-                            onClick={() => onTogglePause(sub)}
-                            className={`p-1.5 rounded-lg transition ${
-                              isPaused
-                                ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
-                                : "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
-                            }`}
-                            title={
-                              isPaused
-                                ? "Resume subscription"
-                                : "Pause subscription"
-                            }
-                          >
-                            {isPaused ? (
-                              <Play className="w-3.5 h-3.5" />
-                            ) : (
-                              <Pause className="w-3.5 h-3.5" />
-                            )}
-                          </button>
-                        )}
-
                         <button
                           onClick={() => onEdit(sub)}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"

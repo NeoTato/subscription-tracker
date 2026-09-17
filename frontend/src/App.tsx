@@ -120,19 +120,20 @@ export function App() {
     }
   };
 
-  const handleTogglePause = async (sub: Subscription) => {
+  const handleStatusChange = async (
+    sub: Subscription,
+    newStatus: "active" | "paused",
+  ) => {
     try {
-      const nextStatus =
-        (sub.status || "active") === "paused" ? "active" : "paused";
-      await api.updateSubscription(sub.id, { status: nextStatus });
+      await api.updateSubscription(sub.id, { status: newStatus });
       showToast(
-        nextStatus === "paused"
-          ? `Paused ${sub.name}. It won't trigger renewal alerts.`
+        newStatus === "paused"
+          ? `Paused ${sub.name}. It won't trigger renewal alerts or count toward spend.`
           : `Resumed ${sub.name}!`,
       );
       await loadData();
     } catch (err: any) {
-      showToast("Failed to toggle status: " + err.message);
+      showToast("Failed to update status: " + err.message);
     }
   };
 
@@ -243,7 +244,7 @@ export function App() {
           subscriptions={subscriptions}
           onEdit={handleEditSubscription}
           onDelete={handleDeleteSubscription}
-          onTogglePause={handleTogglePause}
+          onStatusChange={handleStatusChange}
           onAddClick={handleAddSubscription}
         />
       </main>
