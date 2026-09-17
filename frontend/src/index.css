@@ -4,7 +4,11 @@
 
 @layer base {
   html {
-    color-scheme: light dark;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
@@ -23,11 +27,28 @@
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .dark body {
     background-color: #020617;
+    color: #f8fafc;
+  }
+
+  /* Ensure native select popups follow theme */
+  select,
+  option,
+  optgroup {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  .dark select,
+  .dark option,
+  .dark optgroup {
+    background-color: #0f172a;
     color: #f8fafc;
   }
 }

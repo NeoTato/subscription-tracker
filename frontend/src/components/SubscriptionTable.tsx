@@ -123,7 +123,10 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   };
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div
+      className="relative inline-block text-left"
+      ref={dropdownRef}
+    >
       {/* Trigger Button */}
       <button
         type="button"
@@ -292,22 +295,26 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
+            className="px-3 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium cursor-pointer"
           >
-            <option value="ALL">All Statuses</option>
-            <option value="active">Active Only</option>
-            <option value="paused">Paused Only</option>
+            <option value="ALL" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">All Statuses</option>
+            <option value="active" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">Active Only</option>
+            <option value="paused" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">Paused Only</option>
           </select>
 
           {/* Category Filter */}
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="px-3 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium cursor-pointer"
           >
-            <option value="ALL">All Categories</option>
+            <option value="ALL" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">All Categories</option>
             {categories.map((c) => (
-              <option key={c} value={c}>
+              <option
+                key={c}
+                value={c}
+                className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+              >
                 {c}
               </option>
             ))}
@@ -365,7 +372,9 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                   <tr
                     key={sub.id}
                     className={`transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-800/40 ${
-                      isPaused ? "opacity-60 bg-slate-50/30 dark:bg-slate-900/30" : ""
+                      isPaused
+                        ? "opacity-60 bg-slate-50/30 dark:bg-slate-900/30"
+                        : ""
                     }`}
                   >
                     {/* Service Name & Avatar */}
@@ -375,7 +384,9 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         <div>
                           <div
                             className={`font-semibold text-slate-900 dark:text-white flex items-center gap-1.5 ${
-                              isPaused ? "line-through text-slate-500 dark:text-slate-400" : ""
+                              isPaused
+                                ? "line-through text-slate-500 dark:text-slate-400"
+                                : ""
                             }`}
                           >
                             <span>{sub.name}</span>
