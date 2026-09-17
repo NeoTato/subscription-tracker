@@ -61,7 +61,7 @@ const PlatformAvatar: React.FC<{ sub: Subscription }> = ({ sub }) => {
 
   if (iconUrl && !imgFailed) {
     return (
-      <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700 shadow-sm shrink-0">
+      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center p-1.5 border border-slate-200 dark:border-slate-700 shadow-sm shrink-0">
         <img
           src={iconUrl}
           alt={sub.platform || sub.name}
@@ -73,13 +73,13 @@ const PlatformAvatar: React.FC<{ sub: Subscription }> = ({ sub }) => {
   }
 
   return (
-    <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center font-bold text-brand-400 text-sm border border-slate-700 shrink-0 shadow-sm">
+    <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-emerald-700 dark:text-emerald-400 text-sm border border-slate-200 dark:border-slate-700 shrink-0 shadow-sm">
       {sub.name.charAt(0).toUpperCase()}
     </div>
   );
 };
 
-// Custom Interactive Status Dropdown Popover Component
+// Custom Interactive Status Dropdown Popover Component (R-26, R-32)
 interface StatusDropdownProps {
   currentStatus: "active" | "paused";
   onSelect: (newStatus: "active" | "paused") => void;
@@ -102,11 +102,18 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
         setIsOpen(false);
       }
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen]);
 
@@ -116,28 +123,27 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   };
 
   return (
-    <div
-      className="relative inline-block text-left"
-      ref={dropdownRef}
-    >
+    <div className="relative inline-block text-left" ref={dropdownRef}>
       {/* Trigger Button */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
         className={`inline-flex items-center gap-1.5 pl-2.5 pr-2 py-1 text-[11px] font-semibold rounded-lg border transition shadow-sm ${
           isPaused
-            ? "bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50"
-            : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20 hover:border-emerald-500/50"
+            ? "bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/30 dark:hover:bg-amber-500/20"
+            : "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30 dark:hover:bg-emerald-500/20"
         }`}
       >
         {isPaused ? (
-          <PauseCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <PauseCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
         ) : (
-          <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
         )}
         <span className="capitalize">{currentStatus}</span>
         <ChevronDown
-          className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${
+          className={`w-3 h-3 text-slate-500 dark:text-slate-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -145,39 +151,48 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
 
       {/* Floating Dropdown Menu */}
       {isOpen && (
-        <div className="absolute left-0 mt-1.5 w-32 rounded-xl bg-slate-900 border border-slate-700 shadow-xl shadow-black/60 p-1 z-50 animate-in fade-in zoom-in-95 duration-100">
+        <div
+          role="menu"
+          className="absolute left-0 mt-1.5 w-32 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl p-1 z-50 animate-in fade-in zoom-in-95 duration-100"
+        >
           {/* Active Option */}
           <button
             type="button"
+            role="menuitem"
             onClick={() => handleChoose("active")}
             className={`w-full flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg transition font-medium ${
               !isPaused
-                ? "bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-500/30"
-                : "text-slate-300 hover:bg-emerald-500/15 hover:text-emerald-300"
+                ? "bg-emerald-50 text-emerald-900 font-semibold border border-emerald-300 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30"
+                : "text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-500/15 hover:text-emerald-900 dark:hover:text-emerald-300"
             }`}
           >
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Active</span>
             </div>
-            {!isPaused && <Check className="w-3 h-3 text-emerald-400" />}
+            {!isPaused && (
+              <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+            )}
           </button>
 
           {/* Paused Option */}
           <button
             type="button"
+            role="menuitem"
             onClick={() => handleChoose("paused")}
             className={`w-full flex items-center justify-between px-2.5 py-1.5 text-xs rounded-lg transition font-medium mt-0.5 ${
               isPaused
-                ? "bg-amber-500/15 text-amber-300 font-semibold border border-amber-500/30"
-                : "text-slate-300 hover:bg-amber-500/15 hover:text-amber-300"
+                ? "bg-amber-50 text-amber-900 font-semibold border border-amber-300 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/30"
+                : "text-slate-700 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-500/15 hover:text-amber-900 dark:hover:text-amber-300"
             }`}
           >
             <div className="flex items-center gap-2">
-              <PauseCircle className="w-3.5 h-3.5 text-amber-400" />
+              <PauseCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span>Paused</span>
             </div>
-            {isPaused && <Check className="w-3 h-3 text-amber-400" />}
+            {isPaused && (
+              <Check className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+            )}
           </button>
         </div>
       )}
@@ -194,51 +209,44 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   onAddClick,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const [filterPaidByMe, setFilterPaidByMe] = useState<string>("ALL");
-  const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [selectedStatus, setSelectedStatus] = useState<
+    "ALL" | "active" | "paused"
+  >("ALL");
 
-  // Categories list
   const categories = Array.from(
-    new Set(subscriptions.map((s) => s.category || "Other")),
+    new Set(subscriptions.map((s) => s.category).filter(Boolean)),
   );
 
-  // Filter subscriptions
-  const filtered = subscriptions.filter((s) => {
-    const isPaused = (s.status || "active") === "paused";
+  const filteredSubscriptions = subscriptions.filter((sub) => {
     const matchesSearch =
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (s.platform &&
-        s.platform.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (s.notes && s.notes.toLowerCase().includes(searchTerm.toLowerCase()));
+      sub.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (sub.platform &&
+        sub.platform.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (sub.category &&
+        sub.category.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesCategory =
-      selectedCategory === "ALL" ||
-      (s.category || "Other") === selectedCategory;
+      selectedCategory === "ALL" || sub.category === selectedCategory;
 
-    const matchesPaid =
-      filterPaidByMe === "ALL" ||
-      (filterPaidByMe === "ME" && s.is_paid_by_me) ||
-      (filterPaidByMe === "OTHERS" && !s.is_paid_by_me);
-
+    const subStatus = sub.status || "active";
     const matchesStatus =
-      filterStatus === "ALL" ||
-      (filterStatus === "ACTIVE" && !isPaused) ||
-      (filterStatus === "PAUSED" && isPaused);
+      selectedStatus === "ALL" || subStatus === selectedStatus;
 
-    return matchesSearch && matchesCategory && matchesPaid && matchesStatus;
+    return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const getBillingCycleBadge = (cycle: string) => {
-    switch (cycle.toLowerCase()) {
+  const getBillingCycleBadge = (cycle?: string) => {
+    const c = (cycle || "monthly").toLowerCase();
+    switch (c) {
       case "yearly":
-        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+        return "bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20";
       case "weekly":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-cyan-50 text-cyan-800 border-cyan-200 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20";
       case "daily":
-        return "bg-rose-500/10 text-rose-400 border-rose-500/20";
+        return "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20";
       default:
-        return "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+        return "bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700";
     }
   };
 
@@ -254,160 +262,150 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   };
 
   return (
-    <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
-      {/* Table Header Controls */}
-      <div className="p-4 sm:p-5 border-b border-slate-800/80 flex flex-col md:flex-row gap-3 md:items-center justify-between">
+    <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+      {/* Table Controls Header */}
+      <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-white">
-            Subscriptions ({filtered.length})
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Manage, filter, track, and pause renewal cycles
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            Subscription Ledger
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {filteredSubscriptions.length} of {subscriptions.length}{" "}
+            subscriptions tracked
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Search */}
-          <div className="relative flex-1 sm:w-56">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          {/* Search Bar */}
+          <div className="relative min-w-[200px] flex-1 sm:flex-initial">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search service..."
+              placeholder="Search service, name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition"
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
           </div>
 
           {/* Status Filter */}
           <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="py-1.5 px-3 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-brand-500"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value as any)}
+            className="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium"
           >
             <option value="ALL">All Statuses</option>
-            <option value="ACTIVE">Active Only</option>
-            <option value="PAUSED">Paused Only</option>
+            <option value="active">Active Only</option>
+            <option value="paused">Paused Only</option>
           </select>
 
           {/* Category Filter */}
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="py-1.5 px-3 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-brand-500"
+            className="px-3 py-1.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
-              <option
-                key={c}
-                value={c}
-              >
+              <option key={c} value={c}>
                 {c}
               </option>
             ))}
           </select>
-
-          {/* Paid By Filter */}
-          <select
-            value={filterPaidByMe}
-            onChange={(e) => setFilterPaidByMe(e.target.value)}
-            className="py-1.5 px-3 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-brand-500"
-          >
-            <option value="ALL">All Payees</option>
-            <option value="ME">Paid By Me</option>
-            <option value="OTHERS">Shared / Covered</option>
-          </select>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-slate-800 bg-slate-950/40 text-[11px] uppercase tracking-wider font-semibold text-slate-400">
-              <th className="py-3 px-4">Service</th>
-              <th className="py-3 px-4">Cost</th>
-              <th className="py-3 px-4">Cycle</th>
-              <th className="py-3 px-4">Next Renewal</th>
-              <th className="py-3 px-4">Category</th>
-              <th className="py-3 px-4">Payment Method</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/60 text-xs text-slate-200">
-            {filtered.length === 0 ? (
+      {/* Table or Empty State (R-03 Responsive Overflow + R-27 Empty States) */}
+      {filteredSubscriptions.length === 0 ? (
+        <div className="p-12 text-center flex flex-col items-center justify-center">
+          <div className="p-3.5 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 mb-3 border border-slate-200 dark:border-slate-700/60">
+            <PackageOpen className="w-6 h-6" />
+          </div>
+          <h4 className="text-sm font-bold text-slate-900 dark:text-slate-200">
+            No subscriptions matched
+          </h4>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
+            {searchTerm ||
+            selectedCategory !== "ALL" ||
+            selectedStatus !== "ALL"
+              ? "Try adjusting your search query, status, or category filter."
+              : "Get started by logging your first recurring subscription."}
+          </p>
+          {onAddClick && subscriptions.length === 0 && (
+            <button
+              type="button"
+              onClick={onAddClick}
+              className="mt-4 px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm transition active:scale-95"
+            >
+              Add Subscription
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+            <thead className="bg-slate-50 dark:bg-slate-900/80 text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
               <tr>
-                <td
-                  colSpan={8}
-                  className="py-14 text-center text-slate-400 font-sans"
-                >
-                  <div className="flex flex-col items-center justify-center max-w-xs mx-auto">
-                    <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 mb-2.5">
-                      <PackageOpen className="w-5 h-5" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-200">
-                      No subscriptions found
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1 mb-3.5">
-                      {searchTerm
-                        ? "No results matched your search criteria."
-                        : "Start tracking your monthly subscriptions and renewals."}
-                    </p>
-                    {onAddClick && (
-                      <button
-                        onClick={onAddClick}
-                        className="px-4 py-2 bg-slate-800/90 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95"
-                      >
-                        Add Subscription
-                      </button>
-                    )}
-                  </div>
-                </td>
+                <th className="py-3 px-4 font-semibold">Service</th>
+                <th className="py-3 px-4 font-semibold">Cost</th>
+                <th className="py-3 px-4 font-semibold">Cycle</th>
+                <th className="py-3 px-4 font-semibold">Category</th>
+                <th className="py-3 px-4 font-semibold">Next Due Date</th>
+                <th className="py-3 px-4 font-semibold">Status</th>
+                <th className="py-3 px-4 font-semibold text-right">Actions</th>
               </tr>
-            ) : (
-              filtered.map((sub) => {
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+              {filteredSubscriptions.map((sub) => {
                 const isPaused = (sub.status || "active") === "paused";
-                const isDueSoon =
-                  !isPaused &&
-                  new Date(sub.next_due_date).getTime() -
-                    new Date().getTime() <=
-                    7 * 24 * 60 * 60 * 1000;
+                const isStudent = !!sub.student_status_expiry;
+                const isRemind = !!sub.remind_to_cancel;
 
                 return (
                   <tr
                     key={sub.id}
-                    className={`hover:bg-slate-800/40 transition group ${
-                      isPaused ? "opacity-80 bg-slate-950/20" : ""
+                    className={`transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-800/40 ${
+                      isPaused ? "opacity-60 bg-slate-50/30 dark:bg-slate-900/30" : ""
                     }`}
                   >
-                    {/* Name / Platform */}
-                    <td className="py-3.5 px-4 font-medium">
-                      <div className="flex items-center gap-2.5">
+                    {/* Service Name & Avatar */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
                         <PlatformAvatar sub={sub} />
                         <div>
-                          <div className="text-white font-semibold flex items-center gap-1.5">
-                            <span
-                              className={
-                                isPaused ? "line-through text-slate-400" : ""
-                              }
-                            >
-                              {sub.name}
-                            </span>
-                            {!isPaused && sub.remind_to_cancel && (
+                          <div
+                            className={`font-semibold text-slate-900 dark:text-white flex items-center gap-1.5 ${
+                              isPaused ? "line-through text-slate-500 dark:text-slate-400" : ""
+                            }`}
+                          >
+                            <span>{sub.name}</span>
+                            {isStudent && (
                               <span
-                                className="p-0.5 rounded bg-rose-500/20 text-rose-400"
-                                title="Cancel reminder active"
+                                title={`Student discount active until ${new Date(
+                                  sub.student_status_expiry!,
+                                ).toLocaleDateString()}`}
+                                className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200 dark:bg-purple-500/20 dark:text-purple-300 dark:border-purple-500/30"
                               >
-                                <AlertCircle className="w-3 h-3" />
+                                Student
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                            <span>{sub.platform || "Direct"}</span>
-                            <span>•</span>
-                            <span className="capitalize">{sub.plan_type}</span>
-                            {sub.tier && <span>({sub.tier})</span>}
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
+                            {sub.platform && <span>{sub.platform}</span>}
+                            {sub.tier && (
+                              <>
+                                <span>·</span>
+                                <span>{sub.tier}</span>
+                              </>
+                            )}
+                            {sub.plan_type && sub.plan_type !== "solo" && (
+                              <>
+                                <span>·</span>
+                                <span className="capitalize">
+                                  {sub.plan_type}
+                                </span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -419,14 +417,15 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         className={`font-semibold ${
                           isPaused
                             ? "text-slate-400 line-through"
-                            : "text-white"
+                            : "text-slate-900 dark:text-white"
                         }`}
                       >
                         {sub.currency} {sub.price.toFixed(2)}
                       </div>
-                      {isPaused && (
-                        <div className="text-[10px] text-amber-400/80 font-normal">
-                          Excluded from spend
+                      {sub.payment_method && (
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
+                          <CreditCard className="w-3 h-3" />
+                          <span>{sub.payment_method}</span>
                         </div>
                       )}
                     </td>
@@ -434,63 +433,46 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     {/* Billing Cycle */}
                     <td className="py-3.5 px-4">
                       <span
-                        className={`inline-block px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full border ${getBillingCycleBadge(
+                        className={`inline-block text-[10px] uppercase font-semibold px-2 py-0.5 rounded-md border ${getBillingCycleBadge(
                           sub.billing_cycle,
                         )}`}
                       >
-                        {sub.billing_cycle}
+                        {sub.billing_cycle || "Monthly"}
                       </span>
-                    </td>
-
-                    {/* Next Renewal */}
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                        <span
-                          className={
-                            isPaused
-                              ? "text-slate-500 italic"
-                              : isDueSoon
-                                ? "text-amber-400 font-medium"
-                                : "text-slate-300"
-                          }
-                        >
-                          {isPaused
-                            ? `On hold (${new Date(
-                                sub.next_due_date,
-                              ).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                              })})`
-                            : new Date(sub.next_due_date).toLocaleDateString(
-                                "en-US",
-                                {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                },
-                              )}
-                        </span>
-                      </div>
                     </td>
 
                     {/* Category */}
-                    <td className="py-3.5 px-4 text-slate-400">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800/80 text-slate-300 text-[11px] border border-slate-700/50">
-                        <Tag className="w-3 h-3 text-slate-400" />
-                        {sub.category || "Entertainment"}
-                      </span>
-                    </td>
-
-                    {/* Payment Method */}
-                    <td className="py-3.5 px-4 text-slate-400">
-                      <div className="flex items-center gap-1.5">
-                        <CreditCard className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{sub.payment_method || "Default Card"}</span>
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                        <Tag className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{sub.category || "Uncategorized"}</span>
                       </div>
                     </td>
 
-                    {/* Interactive Custom Status Dropdown Popover */}
+                    {/* Next Due Date */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        <span>
+                          {new Date(sub.next_due_date).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </span>
+                      </div>
+                      {isRemind && (
+                        <div className="text-[10px] text-rose-600 dark:text-rose-400 flex items-center gap-1 mt-0.5 font-medium">
+                          <AlertCircle className="w-3 h-3" />
+                          <span>Cancel before renewal</span>
+                        </div>
+                      )}
+                    </td>
+
+                    {/* Status Column */}
                     <td className="py-3.5 px-4">
                       <div className="flex flex-col gap-1 items-start">
                         <StatusDropdown
@@ -503,7 +485,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         />
 
                         {/* Payee Subtext */}
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">
                           {sub.is_paid_by_me
                             ? "Paid by me"
                             : "Shared / Covered"}
@@ -511,17 +493,20 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                       </div>
                     </td>
 
-                    {/* Actions */}
+                    {/* Actions Column */}
                     <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition">
+                      <div className="flex items-center justify-end gap-1.5">
                         <button
+                          type="button"
                           onClick={() => onEdit(sub)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-                          title="Edit subscription"
+                          title="Edit Subscription"
+                          aria-label={`Edit ${sub.name}`}
+                          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
+                          type="button"
                           onClick={() => {
                             if (
                               window.confirm(
@@ -531,8 +516,9 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                               onDelete(sub.id);
                             }
                           }}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition"
-                          title="Delete subscription"
+                          title="Delete Subscription"
+                          aria-label={`Delete ${sub.name}`}
+                          className="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -540,11 +526,11 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     </td>
                   </tr>
                 );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

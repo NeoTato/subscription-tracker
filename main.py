@@ -1,4 +1,5 @@
 import os
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
@@ -14,6 +15,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import models
 import utils
 import notifications
+import telegram_bot
 from routers import subscriptions, analytics, maintenance, legacy
 
 logging.basicConfig(level=logging.INFO)
@@ -47,10 +49,14 @@ async def lifespan(app: FastAPI):
     scheduler.start()
     logger.info("SubSentry background scheduler started.")
 
+    # Start interactive Telegram bot listener in background task
+    bot_task = asyncio.create_task(telegram_bot.start_telegram_polling())
+
     yield
 
     scheduler.shutdown()
-    logger.info("SubSentry background scheduler stopped.")
+    bot_task.cancel()
+    logger.info("SubSentry background scheduler and Telegram bot stopped.")
 
 
 app = FastAPI(
@@ -78,6 +84,7 @@ app.include_router(legacy.router)
 # Mount React SPA Frontend (if built)
 frontend_dist = os.path.join(os.path.dirname(__file__), "frontend", "dist")
 
+
 @app.get("/", response_class=HTMLResponse, tags=["General"])
 def home():
     index_file = os.path.join(frontend_dist, "index.html")
@@ -87,6 +94,7 @@ def home():
     <h1>🔐 SubSentry API</h1>
     <p>Backend is running. <a href='/docs'>Swagger API Docs</a></p>
     """
+
 
 if os.path.isdir(frontend_dist):
     app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

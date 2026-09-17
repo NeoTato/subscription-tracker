@@ -270,3 +270,55 @@ def test_paused_subscription_lifecycle(client):
     assert sum_resumed["active_count"] == 1
     assert sum_resumed["paused_count"] == 0
 
+
+def test_telegram_bot_formatting_and_actions():
+    """Verify telegram formatting helpers and bot action dispatch."""
+    import telegram_bot
+
+    db = TestingSessionLocal()
+    try:
+        sub1 = models.Subscription(
+            name="Netflix",
+            price=549.0,
+            currency="PHP",
+            billing_cycle="monthly",
+            next_due_date=date.today() + timedelta(days=5),
+            status="active",
+            is_paid_by_me=True,
+            category="Entertainment",
+        )
+        sub2 = models.Subscription(
+            name="Archived Service",
+            price=299.0,
+            currency="PHP",
+            billing_cycle="monthly",
+            next_due_date=date.today() + timedelta(days=20),
+            status="paused",
+            is_paid_by_me=True,
+            category="Utilities",
+        )
+        db.add_all([sub1, sub2])
+        db.commit()
+
+        # Format helpers test
+        all_msg = notifications.format_all_subscriptions([sub1, sub2])
+        assert "Netflix" in all_msg
+        assert "Archived Service" in all_msg
+        assert "—" not in all_msg  # R-02 em dash check
+
+        monthly_msg = notifications.format_monthly_subscriptions([sub1, sub2])
+        assert "Netflix" in monthly_msg
+        assert "₱549.00" in monthly_msg
+        assert "—" not in monthly_msg
+
+        summary_msg = notifications.format_financial_summary(db)
+        assert "Financial KPI Summary" in summary_msg
+        assert "₱549.00/mo" in summary_msg
+        assert "—" not in summary_msg
+
+        # Bot handle action test
+        help_out = telegram_bot.handle_action("help")
+        assert "SubSentry Telegram Assistant" in help_out
+    finally:
+        db.close()
+

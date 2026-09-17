@@ -57,7 +57,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "twitch_t1",
-        name: "Tier 1 — ₱100.00 / mo",
+        name: "Tier 1: ₱100.00 / mo",
         tierLabel: "Tier 1",
         price: 100.0,
         currency: "PHP",
@@ -66,7 +66,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "twitch_t2",
-        name: "Tier 2 — ₱200.00 / mo",
+        name: "Tier 2: ₱200.00 / mo",
         tierLabel: "Tier 2",
         price: 200.0,
         currency: "PHP",
@@ -75,7 +75,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "twitch_t3",
-        name: "Tier 3 — ₱500.00 / mo",
+        name: "Tier 3: ₱500.00 / mo",
         tierLabel: "Tier 3",
         price: 500.0,
         currency: "PHP",
@@ -94,7 +94,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "discord_basic",
-        name: "Nitro Basic — ₱99.00 / mo",
+        name: "Nitro Basic: ₱99.00 / mo",
         tierLabel: "Basic",
         price: 99.0,
         currency: "PHP",
@@ -103,7 +103,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "discord_full",
-        name: "Nitro Full — ₱263.99 / mo",
+        name: "Nitro Full: ₱263.99 / mo",
         tierLabel: "Nitro",
         price: 263.99,
         currency: "PHP",
@@ -112,7 +112,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "discord_yearly",
-        name: "Nitro Yearly — ₱2,639.99 / yr",
+        name: "Nitro Yearly: ₱2,639.99 / yr",
         tierLabel: "Nitro (Yearly)",
         price: 2639.99,
         currency: "PHP",
@@ -133,7 +133,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "yt_indiv",
-        name: "Premium Individual — ₱159.00 / mo",
+        name: "Premium Individual: ₱159.00 / mo",
         tierLabel: "Individual",
         price: 159.0,
         currency: "PHP",
@@ -142,7 +142,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "yt_family",
-        name: "Premium Family — ₱239.00 / mo",
+        name: "Premium Family: ₱239.00 / mo",
         tierLabel: "Family",
         price: 239.0,
         currency: "PHP",
@@ -151,7 +151,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "yt_student",
-        name: "Premium Student — ₱95.00 / mo",
+        name: "Premium Student: ₱95.00 / mo",
         tierLabel: "Student",
         price: 95.0,
         currency: "PHP",
@@ -160,7 +160,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "yt_member",
-        name: "Channel Membership — ₱129.00 / mo",
+        name: "Channel Membership: ₱129.00 / mo",
         tierLabel: "Membership",
         price: 129.0,
         currency: "PHP",
@@ -179,7 +179,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "sp_indiv",
-        name: "Individual — ₱149.00 / mo",
+        name: "Individual: ₱149.00 / mo",
         tierLabel: "Individual",
         price: 149.0,
         currency: "PHP",
@@ -188,7 +188,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "sp_duo",
-        name: "Duo — ₱199.00 / mo",
+        name: "Duo: ₱199.00 / mo",
         tierLabel: "Duo",
         price: 199.0,
         currency: "PHP",
@@ -197,7 +197,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "sp_family",
-        name: "Family — ₱279.00 / mo",
+        name: "Family: ₱279.00 / mo",
         tierLabel: "Family",
         price: 279.0,
         currency: "PHP",
@@ -206,7 +206,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "sp_student",
-        name: "Student — ₱75.00 / mo",
+        name: "Student: ₱75.00 / mo",
         tierLabel: "Student",
         price: 75.0,
         currency: "PHP",
@@ -224,7 +224,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "nf_mobile",
-        name: "Mobile — ₱149.00 / mo",
+        name: "Mobile: ₱149.00 / mo",
         tierLabel: "Mobile",
         price: 149.0,
         currency: "PHP",
@@ -233,7 +233,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "nf_basic",
-        name: "Basic — ₱249.00 / mo",
+        name: "Basic: ₱249.00 / mo",
         tierLabel: "Basic",
         price: 249.0,
         currency: "PHP",
@@ -242,7 +242,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "nf_std",
-        name: "Standard 1080p — ₱399.00 / mo",
+        name: "Standard 1080p: ₱399.00 / mo",
         tierLabel: "Standard",
         price: 399.0,
         currency: "PHP",
@@ -251,7 +251,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "nf_prem",
-        name: "Premium 4K — ₱549.00 / mo",
+        name: "Premium 4K: ₱549.00 / mo",
         tierLabel: "Premium 4K",
         price: 549.0,
         currency: "PHP",
@@ -269,7 +269,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "gpt_plus",
-        name: "ChatGPT Plus — $20.00 USD / mo",
+        name: "ChatGPT Plus: $20.00 USD / mo",
         tierLabel: "Plus",
         price: 20.0,
         currency: "USD",
@@ -278,7 +278,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "gpt_team",
-        name: "ChatGPT Team — $25.00 USD / mo",
+        name: "ChatGPT Team: $25.00 USD / mo",
         tierLabel: "Team",
         price: 25.0,
         currency: "USD",
@@ -296,7 +296,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "g_100gb",
-        name: "Google One 100GB — ₱89.00 / mo",
+        name: "Google One 100GB: ₱89.00 / mo",
         tierLabel: "100GB",
         price: 89.0,
         currency: "PHP",
@@ -305,7 +305,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "g_200gb",
-        name: "Google One 200GB — ₱149.00 / mo",
+        name: "Google One 200GB: ₱149.00 / mo",
         tierLabel: "200GB",
         price: 149.0,
         currency: "PHP",
@@ -314,7 +314,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "g_2tb",
-        name: "Google One 2TB — ₱479.00 / mo",
+        name: "Google One 2TB: ₱479.00 / mo",
         tierLabel: "2TB",
         price: 479.0,
         currency: "PHP",
@@ -323,7 +323,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "g_ai_pro",
-        name: "Google AI Pro — ₱1,100.00 / mo",
+        name: "Google AI Pro: ₱1,100.00 / mo",
         tierLabel: "AI Pro",
         price: 1100.0,
         currency: "PHP",
@@ -341,7 +341,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "gh_copilot_mo",
-        name: "Copilot Monthly — $10.00 USD / mo",
+        name: "Copilot Monthly: $10.00 USD / mo",
         tierLabel: "Copilot Individual",
         price: 10.0,
         currency: "USD",
@@ -350,7 +350,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "gh_copilot_yr",
-        name: "Copilot Yearly — $100.00 USD / yr",
+        name: "Copilot Yearly: $100.00 USD / yr",
         tierLabel: "Copilot Individual (Yearly)",
         price: 100.0,
         currency: "USD",
@@ -359,7 +359,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "gh_pro",
-        name: "GitHub Pro — $4.00 USD / mo",
+        name: "GitHub Pro: $4.00 USD / mo",
         tierLabel: "Pro",
         price: 4.0,
         currency: "USD",
@@ -377,7 +377,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "ap_50gb",
-        name: "iCloud+ 50GB — ₱49.00 / mo",
+        name: "iCloud+ 50GB: ₱49.00 / mo",
         tierLabel: "50GB",
         price: 49.0,
         currency: "PHP",
@@ -386,7 +386,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "ap_200gb",
-        name: "iCloud+ 200GB — ₱149.00 / mo",
+        name: "iCloud+ 200GB: ₱149.00 / mo",
         tierLabel: "200GB",
         price: 149.0,
         currency: "PHP",
@@ -395,7 +395,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "ap_one",
-        name: "Apple One Individual — ₱399.00 / mo",
+        name: "Apple One Individual: ₱399.00 / mo",
         tierLabel: "Apple One Individual",
         price: 399.0,
         currency: "PHP",
@@ -404,7 +404,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "ap_one_fam",
-        name: "Apple One Family — ₱549.00 / mo",
+        name: "Apple One Family: ₱549.00 / mo",
         tierLabel: "Apple One Family",
         price: 549.0,
         currency: "PHP",
@@ -413,7 +413,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "ap_music_student",
-        name: "Apple Music Student — ₱75.00 / mo",
+        name: "Apple Music Student: ₱75.00 / mo",
         tierLabel: "Music Student",
         price: 75.0,
         currency: "PHP",
@@ -431,7 +431,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "dis_basic",
-        name: "Basic — ₱159.00 / mo",
+        name: "Basic: ₱159.00 / mo",
         tierLabel: "Basic",
         price: 159.0,
         currency: "PHP",
@@ -440,7 +440,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "dis_prem",
-        name: "Premium — ₱519.00 / mo",
+        name: "Premium: ₱519.00 / mo",
         tierLabel: "Premium",
         price: 519.0,
         currency: "PHP",
@@ -458,7 +458,7 @@ const PRESET_SERVICES: PresetService[] = [
     tiers: [
       {
         id: "cr_fan",
-        name: "Fan — ₱79.00 / mo",
+        name: "Fan: ₱79.00 / mo",
         tierLabel: "Fan",
         price: 79.0,
         currency: "PHP",
@@ -467,7 +467,7 @@ const PRESET_SERVICES: PresetService[] = [
       },
       {
         id: "cr_megafan",
-        name: "Mega Fan — ₱99.00 / mo",
+        name: "Mega Fan: ₱99.00 / mo",
         tierLabel: "Mega Fan",
         price: 99.0,
         currency: "PHP",
@@ -553,6 +553,21 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
       });
     }
   }, [editingSubscription, isOpen]);
+
+    // Handle Escape key to close modal (R-32)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -652,17 +667,19 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] text-slate-900 dark:text-slate-100 transition-colors">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-brand-400" />
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/80">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             {editingSubscription ? "Edit Subscription" : "New Subscription"}
           </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            aria-label="Close modal"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -675,16 +692,16 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         >
           {/* Preset Template Selector */}
           {!editingSubscription && (
-            <div className="p-3.5 bg-slate-950/70 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="p-3.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200 dark:border-slate-800/80 space-y-3">
               <div>
-                <label className="block text-brand-400 font-semibold mb-1 flex items-center gap-1.5">
+                <label className="block text-emerald-700 dark:text-emerald-400 font-semibold mb-1 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5" />
                   Quick Service Template
                 </label>
                 <select
                   value={selectedPresetId}
                   onChange={(e) => handlePresetChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-brand-500 transition"
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-lg text-slate-900 dark:text-slate-100 font-medium focus:outline-none focus:ring-1 focus:ring-emerald-500 transition"
                 >
                   <option value="custom">⚡ Custom / Manual Entry</option>
                   <optgroup label="Popular Subscriptions & Platforms">
@@ -702,15 +719,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
               {/* Dynamic Tier Selector for Preset */}
               {currentPreset && currentPreset.tiers.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-slate-800/60">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-slate-200 dark:border-slate-800/60">
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">
+                    <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">
                       Preset Plan & Pricing
                     </label>
                     <select
                       value={selectedTierId}
                       onChange={(e) => handleTierChange(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-brand-500"
+                      className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     >
                       {currentPreset.tiers.map((t) => (
                         <option
@@ -725,7 +742,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                   {currentPreset.isStreamerSub && (
                     <div>
-                      <label className="block text-slate-300 font-medium mb-1">
+                      <label className="block text-slate-700 dark:text-slate-300 font-medium mb-1">
                         Streamer / Creator Name
                       </label>
                       <input
@@ -735,7 +752,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                         onChange={(e) =>
                           handleStreamerNameChange(e.target.value)
                         }
-                        className="w-full px-3 py-1.5 bg-slate-900 border border-slate-700/80 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                        className="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                       />
                     </div>
                   )}
@@ -747,7 +764,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
           {/* Service Name & Provider */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Service Name *
               </label>
               <input
@@ -758,11 +775,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Platform / Provider
               </label>
               <input
@@ -772,7 +789,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, platform: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
           </div>
@@ -780,7 +797,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
           {/* Price, Currency & Cycle */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Price *
               </label>
               <input
@@ -796,11 +813,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     price: parseFloat(e.target.value) || 0,
                   })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Currency
               </label>
               <select
@@ -808,7 +825,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, currency: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               >
                 {CURRENCIES.map((c) => (
                   <option
@@ -821,7 +838,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Billing Cycle
               </label>
               <select
@@ -832,7 +849,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     billing_cycle: e.target.value as any,
                   })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500 capitalize"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 capitalize"
               >
                 {BILLING_CYCLES.map((c) => (
                   <option
@@ -849,7 +866,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
           {/* Next Due Date & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Next Renewal Date *
               </label>
               <input
@@ -859,11 +876,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, next_due_date: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Category
               </label>
               <select
@@ -871,7 +888,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               >
                 {CATEGORIES.map((c) => (
                   <option
@@ -888,7 +905,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
           {/* Plan Type & Tier */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Plan Structure
               </label>
               <select
@@ -896,7 +913,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, plan_type: e.target.value as any })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500 capitalize"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 capitalize"
               >
                 {PLAN_TYPES.map((p) => (
                   <option
@@ -909,7 +926,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Tier / Extra Spec
               </label>
               <input
@@ -919,7 +936,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, tier: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
           </div>
@@ -927,7 +944,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
           {/* Payment Method & Student Expiry */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Payment Method
               </label>
               <input
@@ -937,11 +954,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, payment_method: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
             <div>
-              <label className="block text-slate-400 font-medium mb-1">
+              <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
                 Student Status Expiry (Optional)
               </label>
               <input
@@ -953,15 +970,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     student_status_expiry: e.target.value,
                   })
                 }
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
           </div>
 
           {/* Toggles */}
-          <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-slate-300 font-medium">
+              <span className="text-slate-800 dark:text-slate-300 font-medium">
                 I personally pay for this
               </span>
               <input
@@ -970,13 +987,13 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 onChange={(e) =>
                   setFormData({ ...formData, is_paid_by_me: e.target.checked })
                 }
-                className="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-0 focus:ring-offset-0"
+                className="w-4 h-4 rounded text-emerald-600 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-0 focus:ring-offset-0"
               />
             </label>
 
             <label className="flex items-center justify-between cursor-pointer">
               <div>
-                <span className="text-slate-300 font-medium block">
+                <span className="text-slate-800 dark:text-slate-300 font-medium block">
                   Remind me to cancel
                 </span>
                 <span className="text-[10px] text-slate-500">
@@ -992,13 +1009,13 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     remind_to_cancel: e.target.checked,
                   })
                 }
-                className="w-4 h-4 rounded text-rose-500 bg-slate-900 border-slate-700 focus:ring-0 focus:ring-offset-0"
+                className="w-4 h-4 rounded text-rose-600 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-0 focus:ring-offset-0"
               />
             </label>
 
-            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-800/80">
+            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-200 dark:border-slate-800/80">
               <div>
-                <span className="text-slate-300 font-medium block flex items-center gap-1.5">
+                <span className="text-slate-800 dark:text-slate-300 font-medium block flex items-center gap-1.5">
                   <span>Pause subscription</span>
                   {formData.status === "paused" && (
                     <span className="px-1.5 py-0.2 text-[9px] font-semibold bg-amber-500/20 text-amber-400 rounded">
@@ -1020,14 +1037,14 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     status: e.target.checked ? "paused" : "active",
                   })
                 }
-                className="w-4 h-4 rounded text-amber-500 bg-slate-900 border-slate-700 focus:ring-0 focus:ring-offset-0"
+                className="w-4 h-4 rounded text-amber-600 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-0 focus:ring-offset-0"
               />
             </label>
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-slate-400 font-medium mb-1">
+            <label className="block text-slate-700 dark:text-slate-400 font-medium mb-1">
               Notes / Description
             </label>
             <textarea
@@ -1037,7 +1054,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               onChange={(e) =>
                 setFormData({ ...formData, notes: e.target.value })
               }
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+              className="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
           </div>
 
@@ -1046,14 +1063,14 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 border border-transparent hover:border-slate-700 text-xs sm:text-sm font-medium transition active:scale-95"
+              className="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-transparent text-xs sm:text-sm font-medium transition active:scale-95"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-100 font-medium text-xs sm:text-sm border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95 disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm border border-slate-900 dark:border-emerald-500 shadow-sm transition active:scale-95 disabled:opacity-50"
             >
               {isSubmitting
                 ? "Saving..."

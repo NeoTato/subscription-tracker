@@ -20,11 +20,11 @@ interface ExpenseChartProps {
 type SpendingScope = "ME" | "SHARED" | "ALL";
 
 const COLORS = [
-  "#0ea5e9", // Cyan / Brand
-  "#6366f1", // Indigo
   "#10b981", // Emerald
-  "#ec4899", // Pink
+  "#0ea5e9", // Sky
+  "#6366f1", // Indigo
   "#f59e0b", // Amber
+  "#ec4899", // Pink
   "#8b5cf6", // Purple
   "#06b6d4", // Teal
   "#64748b", // Slate
@@ -64,9 +64,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
   const [scope, setScope] = useState<SpendingScope>("ME");
 
   // Compute category breakdown and monthly total dynamically from subscriptions
-  const { chartData, computedTotalMonthly, itemCount } = useMemo(() => {
+  const { chartData, computedTotalMonthly } = useMemo(() => {
     if (!subscriptions || subscriptions.length === 0) {
-      // Fallback to backend summary props if subscriptions list isn't populated
       return {
         chartData: categories.map((c) => ({
           name: c.category,
@@ -74,7 +73,6 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
           count: c.count,
         })),
         computedTotalMonthly: totalMonthly,
-        itemCount: categories.reduce((acc, c) => acc + c.count, 0),
       };
     }
 
@@ -118,7 +116,6 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
     return {
       chartData: data,
       computedTotalMonthly: Number(total.toFixed(2)),
-      itemCount: filtered.length,
     };
   }, [subscriptions, categories, totalMonthly, scope]);
 
@@ -134,25 +131,25 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
   };
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col min-h-[340px] justify-between">
+    <div className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col min-h-[340px] justify-between transition-colors">
       {/* Header Controls: Title, Scope Toggle, and Total */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800/80">
         <div className="flex items-center gap-2">
-          <PieIcon className="w-4 h-4 text-brand-400 shrink-0" />
-          <h3 className="text-sm font-semibold text-white">
+          <PieIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
             Category Breakdown
           </h3>
         </div>
 
-        {/* Scope Pill Filter */}
-        <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+        {/* Scope Filter Buttons (R-26, R-32) */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
           <button
             type="button"
             onClick={() => setScope("ME")}
             className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1.5 ${
               scope === "ME"
-                ? "bg-brand-500 text-white shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-white dark:bg-emerald-600 text-slate-900 dark:text-white shadow-sm font-semibold"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
             title="Personal Outflow (Paid by me)"
           >
@@ -164,8 +161,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
             onClick={() => setScope("SHARED")}
             className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1.5 ${
               scope === "SHARED"
-                ? "bg-brand-500 text-white shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-white dark:bg-emerald-600 text-slate-900 dark:text-white shadow-sm font-semibold"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
             title="Covered by family, friends, or shared plans"
           >
@@ -177,8 +174,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
             onClick={() => setScope("ALL")}
             className={`px-2.5 py-1 rounded-lg font-medium transition flex items-center gap-1.5 ${
               scope === "ALL"
-                ? "bg-brand-500 text-white shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-white dark:bg-emerald-600 text-slate-900 dark:text-white shadow-sm font-semibold"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
             title="All active subscriptions combined"
           >
@@ -189,46 +186,50 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
 
         {/* Dynamic Total Header */}
         <div className="text-right">
-          <div className="text-[11px] text-slate-400 font-medium">
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
             {getScopeLabel()}
           </div>
-          <div className="text-sm font-bold text-white font-mono">
+          <div className="text-sm font-bold text-slate-900 dark:text-white font-mono">
             ₱
             {computedTotalMonthly.toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-            <span className="text-xs text-slate-400 font-normal"> / mo</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">
+              {" "}
+              / mo
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Chart Body or Empty State */}
+      {/* Chart Body or Empty State (R-27) */}
       {chartData.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-          <div className="p-3 rounded-full bg-slate-800/80 text-slate-400 mb-2 border border-slate-700/60">
+          <div className="p-3 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 mb-2 border border-slate-200 dark:border-slate-700/60">
             {scope === "SHARED" ? (
-              <Users className="w-5 h-5 text-indigo-400" />
+              <Users className="w-5 h-5 text-indigo-500" />
             ) : (
               <PieIcon className="w-5 h-5 text-slate-400" />
             )}
           </div>
-          <p className="text-sm font-medium text-slate-200">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
             {scope === "SHARED"
               ? "No shared subscriptions tracked"
               : scope === "ME"
                 ? "No personal subscriptions tracked"
                 : "No subscriptions found"}
           </p>
-          <p className="text-xs text-slate-500 mt-1 max-w-xs">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">
             {scope === "SHARED"
-              ? "Mark subscriptions as 'Shared' in the table or add modal to track their covered value here."
-              : "Add subscriptions to see your monthly spending distribution across categories."}
+              ? "Mark subscriptions as 'Shared' in the table or modal to track their covered value here."
+              : "Add subscriptions to visualize your monthly distribution across categories."}
           </p>
           {onAddClick && (
             <button
+              type="button"
               onClick={onAddClick}
-              className="mt-3.5 px-3.5 py-1.5 bg-slate-800/90 hover:bg-slate-700 text-slate-100 text-xs font-medium rounded-lg border border-slate-700 hover:border-slate-600 shadow-sm transition active:scale-95"
+              className="mt-3.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-slate-100 text-xs font-semibold rounded-lg border border-slate-900 dark:border-slate-700 shadow-sm transition active:scale-95"
             >
               Add Subscription
             </button>
@@ -236,10 +237,7 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
         </div>
       ) : (
         <div className="flex-1 w-full min-h-[220px] pt-2">
-          <ResponsiveContainer
-            width="100%"
-            height={230}
-          >
+          <ResponsiveContainer width="100%" height={230}>
             <PieChart>
               <Pie
                 data={chartData}
@@ -265,8 +263,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
                   name,
                 ]}
                 contentStyle={{
-                  backgroundColor: "#0f172a",
-                  borderColor: "#334155",
+                  backgroundColor: "var(--color-slate-900, #0f172a)",
+                  borderColor: "var(--color-slate-700, #334155)",
                   borderRadius: "8px",
                   color: "#f8fafc",
                   fontSize: "12px",
@@ -277,7 +275,9 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
                 height={36}
                 iconType="circle"
                 formatter={(val) => (
-                  <span className="text-xs text-slate-300 ml-1">{val}</span>
+                  <span className="text-xs text-slate-700 dark:text-slate-300 ml-1">
+                    {val}
+                  </span>
                 )}
               />
             </PieChart>

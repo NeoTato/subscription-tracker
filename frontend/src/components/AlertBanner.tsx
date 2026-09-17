@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  AlertCircle,
-  Clock,
-  GraduationCap,
-  X,
-  CheckCircle2,
-} from "lucide-react";
+import { AlertCircle, Clock, GraduationCap } from "lucide-react";
 import { AlertsResponse } from "../services/api";
 
 interface AlertBannerProps {
@@ -25,30 +19,30 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({
       {alerts.cancellation_reminders.map((sub) => (
         <div
           key={`cancel-${sub.id}`}
-          className="p-4 rounded-xl bg-rose-950/40 border border-rose-800/60 flex items-start sm:items-center justify-between gap-3 text-rose-200"
+          className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 flex items-start sm:items-center justify-between gap-3 text-rose-950 dark:text-rose-200 shadow-sm transition-colors"
         >
           <div className="flex items-start sm:items-center gap-3">
-            <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 mt-0.5 sm:mt-0">
+            <div className="p-2 rounded-lg bg-rose-500/15 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 mt-0.5 sm:mt-0 shrink-0">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-semibold text-white flex items-center gap-2">
+              <div className="font-semibold text-rose-950 dark:text-white flex items-center gap-2 flex-wrap">
                 <span>Cancel Reminder: {sub.name}</span>
-                <span className="text-xs font-normal px-2 py-0.5 rounded bg-rose-500/30 text-rose-200 border border-rose-500/40">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-rose-100 dark:bg-rose-500/30 text-rose-700 dark:text-rose-200 border border-rose-200 dark:border-rose-500/40">
                   Renews {new Date(sub.next_due_date).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-xs text-rose-300/80 mt-0.5">
-                You marked this to be cancelled before next renewal. Current
-                cost: {sub.currency} {sub.price.toFixed(2)} /{" "}
-                {sub.billing_cycle}.
+              <p className="text-xs text-rose-700 dark:text-rose-300/80 mt-0.5">
+                Marked to cancel before next renewal. Current cost:{" "}
+                {sub.currency} {sub.price.toFixed(2)} / {sub.billing_cycle}.
               </p>
             </div>
           </div>
           {onDismissReminder && (
             <button
+              type="button"
               onClick={() => onDismissReminder(sub.id)}
-              className="px-2.5 py-1 text-xs font-medium bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/30 rounded-lg transition shrink-0"
+              className="px-2.5 py-1 text-xs font-semibold bg-rose-100 hover:bg-rose-200 dark:bg-rose-500/20 dark:hover:bg-rose-500/30 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-500/30 rounded-lg transition shrink-0"
             >
               Disable Reminder
             </button>
@@ -60,16 +54,16 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({
       {alerts.due_soon.map((due) => (
         <div
           key={`due-${due.id}`}
-          className="p-4 rounded-xl bg-amber-950/40 border border-amber-800/60 flex items-start sm:items-center justify-between gap-3 text-amber-200"
+          className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 flex items-start sm:items-center justify-between gap-3 text-amber-950 dark:text-amber-200 shadow-sm transition-colors"
         >
           <div className="flex items-start sm:items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 mt-0.5 sm:mt-0">
+            <div className="p-2 rounded-lg bg-amber-500/15 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 mt-0.5 sm:mt-0 shrink-0">
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-semibold text-white flex items-center gap-2">
+              <div className="font-semibold text-amber-950 dark:text-white flex items-center gap-2 flex-wrap">
                 <span>Payment Due Soon: {due.name}</span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded bg-amber-500/30 text-amber-200 border border-amber-500/40">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-500/30 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-500/40">
                   {due.days_left === 0
                     ? "Due Today"
                     : due.days_left === 1
@@ -77,7 +71,7 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({
                       : `In ${due.days_left} days`}
                 </span>
               </div>
-              <p className="text-xs text-amber-300/80 mt-0.5">
+              <p className="text-xs text-amber-700 dark:text-amber-300/80 mt-0.5">
                 {due.currency} {due.price.toFixed(2)} ({due.billing_cycle}) due
                 on {new Date(due.next_due_date).toLocaleDateString()}
               </p>
@@ -90,23 +84,23 @@ export const AlertBanner: React.FC<AlertBannerProps> = ({
       {alerts.student_expiry_reminders.map((exp) => (
         <div
           key={`student-${exp.id}`}
-          className="p-4 rounded-xl bg-purple-950/40 border border-purple-800/60 flex items-start sm:items-center justify-between gap-3 text-purple-200"
+          className="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 flex items-start sm:items-center justify-between gap-3 text-purple-950 dark:text-purple-200 shadow-sm transition-colors"
         >
           <div className="flex items-start sm:items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 mt-0.5 sm:mt-0">
+            <div className="p-2 rounded-lg bg-purple-500/15 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 mt-0.5 sm:mt-0 shrink-0">
               <GraduationCap className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-semibold text-white flex items-center gap-2">
+              <div className="font-semibold text-purple-950 dark:text-white flex items-center gap-2 flex-wrap">
                 <span>Student Discount Expiring: {exp.name}</span>
-                <span className="text-xs font-normal px-2 py-0.5 rounded bg-purple-500/30 text-purple-200 border border-purple-500/40">
+                <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-500/30 text-purple-800 dark:text-purple-200 border border-purple-200 dark:border-purple-500/40">
                   Expires in {exp.days_left} days
                 </span>
               </div>
-              <p className="text-xs text-purple-300/80 mt-0.5">
+              <p className="text-xs text-purple-700 dark:text-purple-300/80 mt-0.5">
                 Discount status expires on{" "}
                 {new Date(exp.student_status_expiry).toLocaleDateString()}.
-                Re-verify your student credentials to maintain discount.
+                Re-verify student credentials to maintain discount pricing.
               </p>
             </div>
           </div>
