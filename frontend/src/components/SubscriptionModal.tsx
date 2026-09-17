@@ -1007,7 +1007,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                   )}
                 </span>
                 <span className="text-[10px] text-slate-500">
-                  Keeps subscription on hold without alerts or affecting monthly spend
+                  Keeps subscription on hold without alerts or affecting monthly
+                  spend
                 </span>
               </div>
               <input

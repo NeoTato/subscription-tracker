@@ -180,7 +180,10 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
-              <option key={c} value={c}>
+              <option
+                key={c}
+                value={c}
+              >
                 {c}
               </option>
             ))}
@@ -266,7 +269,11 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         <PlatformAvatar sub={sub} />
                         <div>
                           <div className="text-white font-semibold flex items-center gap-1.5">
-                            <span className={isPaused ? "line-through text-slate-400" : ""}>
+                            <span
+                              className={
+                                isPaused ? "line-through text-slate-400" : ""
+                              }
+                            >
                               {sub.name}
                             </span>
                             {isPaused && (
@@ -295,7 +302,9 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
 
                     {/* Cost */}
                     <td className="py-3.5 px-4">
-                      <div className={`font-semibold ${isPaused ? "text-slate-400" : "text-white"}`}>
+                      <div
+                        className={`font-semibold ${isPaused ? "text-slate-400" : "text-white"}`}
+                      >
                         {sub.currency} {sub.price.toFixed(2)}
                       </div>
                     </td>
@@ -320,12 +329,14 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                             isPaused
                               ? "text-slate-500 italic"
                               : isDueSoon
-                              ? "text-amber-400 font-medium"
-                              : "text-slate-300"
+                                ? "text-amber-400 font-medium"
+                                : "text-slate-300"
                           }
                         >
                           {isPaused
-                            ? `Paused (${new Date(sub.next_due_date).toLocaleDateString("en-US", {
+                            ? `Paused (${new Date(
+                                sub.next_due_date,
+                              ).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
                               })})`
@@ -388,7 +399,11 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                                 ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                                 : "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
                             }`}
-                            title={isPaused ? "Resume subscription" : "Pause subscription"}
+                            title={
+                              isPaused
+                                ? "Resume subscription"
+                                : "Pause subscription"
+                            }
                           >
                             {isPaused ? (
                               <Play className="w-3.5 h-3.5" />
