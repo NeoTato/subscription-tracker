@@ -95,8 +95,16 @@ export const KPIOverview: React.FC<KPIOverviewProps> = ({
           </div>
         </div>
         <div className="mt-3">
-          <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            {subCount}
+          <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-baseline gap-2">
+            <span>
+              {summary?.active_count ??
+                subCount - (summary?.paused_count ?? 0)}
+            </span>
+            {(summary?.paused_count ?? 0) > 0 && (
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                {summary?.paused_count} paused
+              </span>
+            )}
           </div>
           <div className="text-xs text-slate-400 mt-1">
             <span className="text-indigo-300 font-medium">{paidByMeCount}</span>{" "}

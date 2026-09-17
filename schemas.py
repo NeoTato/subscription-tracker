@@ -37,6 +37,12 @@ class Category(str, Enum):
     other = "Other"
 
 
+class SubscriptionStatus(str, Enum):
+    active = "active"
+    paused = "paused"
+    cancelled = "cancelled"
+
+
 class SubscriptionBase(BaseModel):
     name: str = Field(..., description="Name of the service", json_schema_extra={"example": "YouTube Premium"})
     price: float = Field(..., gt=0, description="Recurring cost", json_schema_extra={"example": 159.00})
@@ -48,10 +54,22 @@ class SubscriptionBase(BaseModel):
     tier: Optional[str] = Field(None, description="Tier or tier level", json_schema_extra={"example": "Family Plan"})
     category: Optional[str] = Field(default="Entertainment", json_schema_extra={"example": "Entertainment"})
     payment_method: Optional[str] = Field(None, description="Payment method used", json_schema_extra={"example": "GCash"})
+    status: str = Field(default="active", description="Subscription status (active, paused, cancelled)", json_schema_extra={"example": "active"})
     is_paid_by_me: bool = Field(default=True, description="Whether this subscription is paid by you")
     remind_to_cancel: bool = Field(default=False, description="Flag to send urgent reminder before next renewal")
     student_status_expiry: Optional[date] = Field(None, description="Expiry date of educational/student discount")
     notes: Optional[str] = Field(None, description="Custom notes or details")
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def parse_status(cls, v):
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"active", "paused", "cancelled"}:
+                return v_clean
+        elif isinstance(v, SubscriptionStatus):
+            return v.value
+        return "active"
 
     @field_validator("plan_type", mode="before")
     @classmethod
@@ -109,10 +127,24 @@ class SubscriptionUpdate(BaseModel):
     tier: Optional[str] = None
     category: Optional[str] = None
     payment_method: Optional[str] = None
+    status: Optional[str] = None
     is_paid_by_me: Optional[bool] = None
     remind_to_cancel: Optional[bool] = None
     student_status_expiry: Optional[date] = None
     notes: Optional[str] = None
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def parse_status(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, str):
+            v_clean = v.strip().lower()
+            if v_clean in {"active", "paused", "cancelled"}:
+                return v_clean
+        elif isinstance(v, SubscriptionStatus):
+            return v.value
+        return "active"
 
     @field_validator("plan_type", mode="before")
     @classmethod
@@ -185,6 +217,8 @@ class SummaryResponse(BaseModel):
     annual_total: float
     currency: str = "PHP"
     sub_count: int
+    active_count: int = 0
+    paused_count: int = 0
     paid_by_me_count: int
     next_payment: Optional[str] = None
     next_payment_date: Optional[date] = None

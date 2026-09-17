@@ -9,6 +9,10 @@ import {
   CheckCircle,
   AlertCircle,
   PackageOpen,
+  PauseCircle,
+  PlayCircle,
+  Pause,
+  Play,
 } from "lucide-react";
 import { Subscription } from "../services/api";
 
@@ -16,6 +20,7 @@ interface SubscriptionTableProps {
   subscriptions: Subscription[];
   onEdit: (sub: Subscription) => void;
   onDelete: (id: number) => void;
+  onTogglePause?: (sub: Subscription) => void;
   onAddClick?: () => void;
 }
 
@@ -78,11 +83,13 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   subscriptions,
   onEdit,
   onDelete,
+  onTogglePause,
   onAddClick,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [filterPaidByMe, setFilterPaidByMe] = useState<string>("ALL");
+  const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
   // Categories list
   const categories = Array.from(
@@ -91,6 +98,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
 
   // Filter subscriptions
   const filtered = subscriptions.filter((s) => {
+    const isPaused = (s.status || "active") === "paused";
     const matchesSearch =
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (s.platform &&
@@ -106,7 +114,12 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
       (filterPaidByMe === "ME" && s.is_paid_by_me) ||
       (filterPaidByMe === "OTHERS" && !s.is_paid_by_me);
 
-    return matchesSearch && matchesCategory && matchesPaid;
+    const matchesStatus =
+      filterStatus === "ALL" ||
+      (filterStatus === "ACTIVE" && !isPaused) ||
+      (filterStatus === "PAUSED" && isPaused);
+
+    return matchesSearch && matchesCategory && matchesPaid && matchesStatus;
   });
 
   const getBillingCycleBadge = (cycle: string) => {
@@ -131,13 +144,13 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
             Subscriptions ({filtered.length})
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Manage, filter, and track renewal cycles
+            Manage, filter, track, and pause renewal cycles
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Search */}
-          <div className="relative flex-1 sm:w-64">
+          <div className="relative flex-1 sm:w-56">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -148,6 +161,17 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
             />
           </div>
 
+          {/* Status Filter */}
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="py-1.5 px-3 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-300 focus:outline-none focus:border-brand-500"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="ACTIVE">Active Only</option>
+            <option value="PAUSED">Paused Only</option>
+          </select>
+
           {/* Category Filter */}
           <select
             value={selectedCategory}
@@ -156,10 +180,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
-              <option
-                key={c}
-                value={c}
-              >
+              <option key={c} value={c}>
                 {c}
               </option>
             ))}
@@ -225,15 +246,19 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
               </tr>
             ) : (
               filtered.map((sub) => {
+                const isPaused = (sub.status || "active") === "paused";
                 const isDueSoon =
+                  !isPaused &&
                   new Date(sub.next_due_date).getTime() -
                     new Date().getTime() <=
-                  7 * 24 * 60 * 60 * 1000;
+                    7 * 24 * 60 * 60 * 1000;
 
                 return (
                   <tr
                     key={sub.id}
-                    className="hover:bg-slate-800/40 transition group"
+                    className={`hover:bg-slate-800/40 transition group ${
+                      isPaused ? "opacity-75 bg-slate-950/20" : ""
+                    }`}
                   >
                     {/* Name / Platform */}
                     <td className="py-3.5 px-4 font-medium">
@@ -241,8 +266,15 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         <PlatformAvatar sub={sub} />
                         <div>
                           <div className="text-white font-semibold flex items-center gap-1.5">
-                            {sub.name}
-                            {sub.remind_to_cancel && (
+                            <span className={isPaused ? "line-through text-slate-400" : ""}>
+                              {sub.name}
+                            </span>
+                            {isPaused && (
+                              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px] font-medium border border-amber-500/20">
+                                Paused
+                              </span>
+                            )}
+                            {!isPaused && sub.remind_to_cancel && (
                               <span
                                 className="p-0.5 rounded bg-rose-500/20 text-rose-400"
                                 title="Cancel reminder active"
@@ -263,7 +295,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
 
                     {/* Cost */}
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-white">
+                      <div className={`font-semibold ${isPaused ? "text-slate-400" : "text-white"}`}>
                         {sub.currency} {sub.price.toFixed(2)}
                       </div>
                     </td>
@@ -285,19 +317,26 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                         <Calendar className="w-3.5 h-3.5 text-slate-400" />
                         <span
                           className={
-                            isDueSoon
+                            isPaused
+                              ? "text-slate-500 italic"
+                              : isDueSoon
                               ? "text-amber-400 font-medium"
                               : "text-slate-300"
                           }
                         >
-                          {new Date(sub.next_due_date).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            },
-                          )}
+                          {isPaused
+                            ? `Paused (${new Date(sub.next_due_date).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })})`
+                            : new Date(sub.next_due_date).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                },
+                              )}
                         </span>
                       </div>
                     </td>
@@ -320,20 +359,45 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
 
                     {/* Status */}
                     <td className="py-3.5 px-4">
-                      {sub.is_paid_by_me ? (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400">
-                          <CheckCircle className="w-3 h-3" /> Paid by me
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                          Shared
-                        </span>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {isPaused ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-amber-400">
+                            <PauseCircle className="w-3 h-3" /> Paused
+                          </span>
+                        ) : sub.is_paid_by_me ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400">
+                            <CheckCircle className="w-3 h-3" /> Active (Paid)
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
+                            Active (Shared)
+                          </span>
+                        )}
+                      </div>
                     </td>
 
                     {/* Actions */}
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition">
+                        {/* 1-Click Pause/Resume Button */}
+                        {onTogglePause && (
+                          <button
+                            onClick={() => onTogglePause(sub)}
+                            className={`p-1.5 rounded-lg transition ${
+                              isPaused
+                                ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
+                                : "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                            }`}
+                            title={isPaused ? "Resume subscription" : "Pause subscription"}
+                          >
+                            {isPaused ? (
+                              <Play className="w-3.5 h-3.5" />
+                            ) : (
+                              <Pause className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        )}
+
                         <button
                           onClick={() => onEdit(sub)}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"

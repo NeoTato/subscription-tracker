@@ -79,6 +79,8 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
     }
 
     const filtered = subscriptions.filter((s) => {
+      const isActive = (s.status || "active") === "active";
+      if (!isActive) return false;
       if (scope === "ME") return s.is_paid_by_me;
       if (scope === "SHARED") return !s.is_paid_by_me;
       return true; // ALL

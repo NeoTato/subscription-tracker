@@ -16,21 +16,23 @@ def get_summary(db: Session = Depends(models.get_db)):
     Safe against empty databases.
     """
     all_subs = db.query(models.Subscription).all()
-    paid_subs = [s for s in all_subs if s.is_paid_by_me]
+    active_subs = [s for s in all_subs if getattr(s, "status", "active") == "active"]
+    paused_subs = [s for s in all_subs if getattr(s, "status", "active") == "paused"]
+    paid_subs = [s for s in active_subs if s.is_paid_by_me]
 
-    # Calculate normalized monthly cost for user-paid subscriptions
+    # Calculate normalized monthly cost for user-paid active subscriptions
     monthly_total = sum(
         utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
         for s in paid_subs
     )
     annual_total = monthly_total * 12.0
 
-    # Find upcoming payment safely
+    # Find upcoming payment safely among active paid subscriptions
     upcoming = None
     if paid_subs:
         upcoming = sorted(paid_subs, key=lambda x: x.next_due_date)[0]
 
-    # Category breakdown
+    # Category breakdown for active paid subscriptions
     categories_map = {}
     for s in paid_subs:
         cat = s.category or "Other"
@@ -54,7 +56,9 @@ def get_summary(db: Session = Depends(models.get_db)):
         annual_total=round(annual_total, 2),
         currency="PHP",
         sub_count=len(all_subs),
-        paid_by_me_count=len(paid_subs),
+        active_count=len(active_subs),
+        paused_count=len(paused_subs),
+        paid_by_me_count=len([s for s in all_subs if s.is_paid_by_me]),
         next_payment=upcoming.name if upcoming else None,
         next_payment_date=upcoming.next_due_date if upcoming else None,
         next_payment_amount=upcoming.price if upcoming else None,
@@ -70,6 +74,7 @@ def get_alerts(db: Session = Depends(models.get_db)):
     Safe against null date comparisons.
     """
     all_subs = db.query(models.Subscription).all()
+    active_subs = [s for s in all_subs if getattr(s, "status", "active") == "active"]
     today = date.today()
     week_ahead = today + timedelta(days=7)
     month_ahead = today + timedelta(days=30)
@@ -84,13 +89,13 @@ def get_alerts(db: Session = Depends(models.get_db)):
             next_due_date=s.next_due_date,
             days_left=(s.next_due_date - today).days,
         )
-        for s in all_subs
+        for s in active_subs
         if today <= s.next_due_date <= week_ahead
     ]
 
     cancellation_reminders = [
         schemas.SubscriptionResponse.model_validate(s)
-        for s in all_subs
+        for s in active_subs
         if s.remind_to_cancel
     ]
 
@@ -104,7 +109,7 @@ def get_alerts(db: Session = Depends(models.get_db)):
             student_status_expiry=s.student_status_expiry,
             days_left=(s.student_status_expiry - today).days,
         )
-        for s in all_subs
+        for s in active_subs
         if s.student_status_expiry is not None and today <= s.student_status_expiry <= month_ahead
     ]
 

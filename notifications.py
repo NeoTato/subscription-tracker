@@ -190,6 +190,7 @@ def check_and_notify(db: Optional[Session] = None) -> Dict[str, Any]:
         month_ahead = today + timedelta(days=30)
 
         all_subs = db.query(models.Subscription).all()
+        active_subs = [s for s in all_subs if getattr(s, "status", "active") == "active"]
 
         due_soon = [
             {
@@ -204,7 +205,7 @@ def check_and_notify(db: Optional[Session] = None) -> Dict[str, Any]:
                 "payment_method": s.payment_method,
                 "is_paid_by_me": s.is_paid_by_me,
             }
-            for s in all_subs
+            for s in active_subs
             if today <= s.next_due_date <= week_ahead
         ]
 
@@ -220,7 +221,7 @@ def check_and_notify(db: Optional[Session] = None) -> Dict[str, Any]:
                 "tier": s.tier,
                 "notes": s.notes,
             }
-            for s in all_subs
+            for s in active_subs
             if s.remind_to_cancel
         ]
 
@@ -231,7 +232,7 @@ def check_and_notify(db: Optional[Session] = None) -> Dict[str, Any]:
                 "expiry_date": s.student_status_expiry,
                 "due_date": s.next_due_date,
             }
-            for s in all_subs
+            for s in active_subs
             if s.student_status_expiry
             and today <= s.student_status_expiry <= month_ahead
         ]
@@ -239,19 +240,19 @@ def check_and_notify(db: Optional[Session] = None) -> Dict[str, Any]:
         # Calculate rich stats
         due_soon_total_php = sum(
             utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
-            for s in all_subs
+            for s in active_subs
             if today <= s.next_due_date <= week_ahead and s.is_paid_by_me
         )
         monthly_run_rate_php = sum(
             utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
-            for s in all_subs
+            for s in active_subs
             if s.is_paid_by_me
         )
 
         stats = {
             "total_due_week_php": round(due_soon_total_php, 2),
             "monthly_run_rate_php": round(monthly_run_rate_php, 2),
-            "active_sub_count": len(all_subs),
+            "active_sub_count": len(active_subs),
         }
 
         has_alerts = bool(due_soon or cancellation_reminders or student_expiries)

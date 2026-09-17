@@ -211,3 +211,62 @@ def test_utils_cost_normalization():
     assert utils.to_PHP(100.0, "PHP") == 100.0
     assert utils.to_PHP(10.0, "USD") == 585.0
 
+
+def test_paused_subscription_lifecycle(client):
+    """Verify that paused subscriptions do not contribute to spending totals or trigger alerts."""
+    today = date.today()
+    due_in_2_days = today + timedelta(days=2)
+
+    # 1. Create an active subscription
+    sub_res = client.post("/api/v1/subscriptions", json={
+        "name": "Gym Membership",
+        "price": 2000.0,
+        "currency": "PHP",
+        "billing_cycle": "monthly",
+        "next_due_date": due_in_2_days.isoformat(),
+        "status": "active",
+        "is_paid_by_me": True,
+        "remind_to_cancel": True,
+    })
+    assert sub_res.status_code == 201
+    sub_id = sub_res.json()["id"]
+
+    # Active summary check
+    sum_active = client.get("/api/v1/analytics/summary").json()
+    assert sum_active["monthly_total"] == 2000.0
+    assert sum_active["active_count"] == 1
+    assert sum_active["paused_count"] == 0
+
+    # Active alerts check
+    alerts_active = client.get("/api/v1/analytics/alerts").json()
+    assert len(alerts_active["due_soon"]) == 1
+    assert len(alerts_active["cancellation_reminders"]) == 1
+
+    # 2. Pause the subscription
+    patch_res = client.patch(f"/api/v1/subscriptions/{sub_id}", json={"status": "paused"})
+    assert patch_res.status_code == 200
+    assert patch_res.json()["status"] == "paused"
+
+    # Paused summary check (spending drops to 0)
+    sum_paused = client.get("/api/v1/analytics/summary").json()
+    assert sum_paused["monthly_total"] == 0.0
+    assert sum_paused["sub_count"] == 1
+    assert sum_paused["active_count"] == 0
+    assert sum_paused["paused_count"] == 1
+    assert sum_paused["next_payment"] is None
+
+    # Paused alerts check (no alerts triggered)
+    alerts_paused = client.get("/api/v1/analytics/alerts").json()
+    assert len(alerts_paused["due_soon"]) == 0
+    assert len(alerts_paused["cancellation_reminders"]) == 0
+
+    # 3. Resume the subscription
+    resume_res = client.patch(f"/api/v1/subscriptions/{sub_id}", json={"status": "active"})
+    assert resume_res.status_code == 200
+    assert resume_res.json()["status"] == "active"
+
+    sum_resumed = client.get("/api/v1/analytics/summary").json()
+    assert sum_resumed["monthly_total"] == 2000.0
+    assert sum_resumed["active_count"] == 1
+    assert sum_resumed["paused_count"] == 0
+

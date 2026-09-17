@@ -61,6 +61,10 @@ def advance_due_dates(db: Optional[Session] = None) -> int:
         updated_count = 0
 
         for s in all_subs:
+            # Skip paused subscriptions
+            if getattr(s, "status", "active") == "paused":
+                continue
+
             modified = False
             cycle = (s.billing_cycle or "monthly").lower()
 

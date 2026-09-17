@@ -30,6 +30,7 @@ class Subscription(Base):
     next_due_date = Column(Date, nullable=False)
     
     # Custom tracking flags
+    status = Column(String, nullable=False, default="active")  # active, paused, cancelled
     is_paid_by_me = Column(Boolean, default=True)
     remind_to_cancel = Column(Boolean, default=False)
     student_status_expiry = Column(Date, nullable=True)
@@ -49,6 +50,7 @@ def init_db():
             existing_cols = {c["name"] for c in inspector.get_columns("subscriptions")}
             
             migrations = [
+                ("status", "VARCHAR DEFAULT 'active'"),
                 ("category", "VARCHAR DEFAULT 'Entertainment'"),
                 ("payment_method", "VARCHAR DEFAULT 'GCash'"),
                 ("is_paid_by_me", "BOOLEAN DEFAULT 1"),

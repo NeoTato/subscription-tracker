@@ -10,6 +10,7 @@ export interface Subscription {
   tier?: string;
   category?: string;
   payment_method?: string;
+  status: "active" | "paused" | "cancelled";
   is_paid_by_me: boolean;
   remind_to_cancel: boolean;
   student_status_expiry?: string;
@@ -30,6 +31,8 @@ export interface SummaryResponse {
   annual_total: number;
   currency: string;
   sub_count: number;
+  active_count?: number;
+  paused_count?: number;
   paid_by_me_count: number;
   next_payment?: string | null;
   next_payment_date?: string | null;

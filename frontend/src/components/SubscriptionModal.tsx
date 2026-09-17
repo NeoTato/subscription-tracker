@@ -499,6 +499,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
     tier: "",
     category: "Entertainment",
     payment_method: "GCash",
+    status: "active",
     is_paid_by_me: true,
     remind_to_cancel: false,
     student_status_expiry: "",
@@ -523,6 +524,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         tier: editingSubscription.tier || "",
         category: editingSubscription.category || "Entertainment",
         payment_method: editingSubscription.payment_method || "",
+        status: editingSubscription.status || "active",
         is_paid_by_me: editingSubscription.is_paid_by_me,
         remind_to_cancel: editingSubscription.remind_to_cancel || false,
         student_status_expiry: editingSubscription.student_status_expiry || "",
@@ -543,6 +545,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         tier: "",
         category: "Entertainment",
         payment_method: "GCash",
+        status: "active",
         is_paid_by_me: true,
         remind_to_cancel: false,
         student_status_expiry: "",
@@ -990,6 +993,33 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                   })
                 }
                 className="w-4 h-4 rounded text-rose-500 bg-slate-900 border-slate-700 focus:ring-0 focus:ring-offset-0"
+              />
+            </label>
+
+            <label className="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-800/80">
+              <div>
+                <span className="text-slate-300 font-medium block flex items-center gap-1.5">
+                  <span>Pause subscription</span>
+                  {formData.status === "paused" && (
+                    <span className="px-1.5 py-0.2 text-[9px] font-semibold bg-amber-500/20 text-amber-400 rounded">
+                      PAUSED
+                    </span>
+                  )}
+                </span>
+                <span className="text-[10px] text-slate-500">
+                  Keeps subscription on hold without alerts or affecting monthly spend
+                </span>
+              </div>
+              <input
+                type="checkbox"
+                checked={formData.status === "paused"}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    status: e.target.checked ? "paused" : "active",
+                  })
+                }
+                className="w-4 h-4 rounded text-amber-500 bg-slate-900 border-slate-700 focus:ring-0 focus:ring-offset-0"
               />
             </label>
           </div>

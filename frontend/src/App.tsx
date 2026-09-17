@@ -120,6 +120,22 @@ export function App() {
     }
   };
 
+  const handleTogglePause = async (sub: Subscription) => {
+    try {
+      const nextStatus =
+        (sub.status || "active") === "paused" ? "active" : "paused";
+      await api.updateSubscription(sub.id, { status: nextStatus });
+      showToast(
+        nextStatus === "paused"
+          ? `Paused ${sub.name}. It won't trigger renewal alerts.`
+          : `Resumed ${sub.name}!`,
+      );
+      await loadData();
+    } catch (err: any) {
+      showToast("Failed to toggle status: " + err.message);
+    }
+  };
+
   const handleDismissReminder = async (id: number) => {
     try {
       await api.updateSubscription(id, { remind_to_cancel: false });
@@ -227,6 +243,7 @@ export function App() {
           subscriptions={subscriptions}
           onEdit={handleEditSubscription}
           onDelete={handleDeleteSubscription}
+          onTogglePause={handleTogglePause}
           onAddClick={handleAddSubscription}
         />
       </main>
