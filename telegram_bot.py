@@ -160,3 +160,4 @@ async def start_telegram_polling():
         except Exception as e:
             logger.error(f"Error in Telegram bot polling: {e}")
             await asyncio.sleep(5)
+

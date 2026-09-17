@@ -237,7 +237,10 @@ export const ExpenseChart: React.FC<ExpenseChartProps> = ({
         </div>
       ) : (
         <div className="flex-1 w-full min-h-[220px] pt-2">
-          <ResponsiveContainer width="100%" height={230}>
+          <ResponsiveContainer
+            width="100%"
+            height={230}
+          >
             <PieChart>
               <Pie
                 data={chartData}

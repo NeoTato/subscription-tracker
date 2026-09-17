@@ -297,9 +297,24 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
             onChange={(e) => setSelectedStatus(e.target.value as any)}
             className="px-3 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium cursor-pointer"
           >
-            <option value="ALL" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">All Statuses</option>
-            <option value="active" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">Active Only</option>
-            <option value="paused" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">Paused Only</option>
+            <option
+              value="ALL"
+              className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+            >
+              All Statuses
+            </option>
+            <option
+              value="active"
+              className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+            >
+              Active Only
+            </option>
+            <option
+              value="paused"
+              className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+            >
+              Paused Only
+            </option>
           </select>
 
           {/* Category Filter */}
@@ -308,7 +323,12 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="px-3 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-medium cursor-pointer"
           >
-            <option value="ALL" className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">All Categories</option>
+            <option
+              value="ALL"
+              className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+            >
+              All Categories
+            </option>
             {categories.map((c) => (
               <option
                 key={c}

@@ -109,8 +109,7 @@ export const KPIOverview: React.FC<KPIOverviewProps> = ({
             <span className="text-indigo-700 dark:text-indigo-300 font-medium">
               {paidByMeCount}
             </span>{" "}
-            paid by you ·{" "}
-            <span>{subCount - paidByMeCount} shared/covered</span>
+            paid by you · <span>{subCount - paidByMeCount} shared/covered</span>
           </div>
         </div>
       </div>

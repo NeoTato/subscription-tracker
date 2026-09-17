@@ -88,6 +88,12 @@ cd ..
 # Run backend API & serve SPA
 .venv\Scripts\python.exe -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
+
+```bash
+# If already in virtual environment
+uvicorn main:app --reload --port 8000
+```
+
 Open `http://127.0.0.1:8000` in your browser.
 
 ---
