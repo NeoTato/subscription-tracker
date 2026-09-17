@@ -180,24 +180,27 @@ def format_message(
 
 
 def format_all_subscriptions(subs: List[models.Subscription]) -> str:
-    """Format full list of subscriptions for on-demand Telegram view."""
+    """Format full list of subscriptions arranged by upcoming due date."""
     if not subs:
         return "📋 *Subscriptions Ledger*\n\nNo subscriptions are currently recorded in SubSentry."
 
+    # Sort by upcoming next due date ascending
+    sorted_subs = sorted(subs, key=lambda s: (s.next_due_date is None, s.next_due_date))
+
     lines = [
         "📋 *All Subscriptions Ledger*",
-        f"Total Tracked: {len(subs)}\n",
+        f"Total Tracked: {len(sorted_subs)} (Arranged by Due Date)\n",
         "━━━━━━━━━━━━━━━━━━━━━━━━━",
     ]
 
-    for s in subs:
+    for s in sorted_subs:
         status_tag = "⏸️ `[PAUSED]`" if s.status == "paused" else "✅ `[ACTIVE]`"
         price_str = f"{s.currency} {s.price:.2f}"
         due_str = s.next_due_date.strftime("%b %d, %Y") if s.next_due_date else "N/A"
-        
+
         lines.append(f"• *{s.name}* {status_tag}")
         lines.append(f"  └ Cost: `{price_str}` / {s.billing_cycle}")
-        lines.append(f"  └ Category: {s.category or 'Other'} | Next Due: {due_str}")
+        lines.append(f"  └ Next Due: *{due_str}* | Category: {s.category or 'Other'}")
         if s.payment_method:
             lines.append(f"  └ Payment: {s.payment_method}")
         lines.append("")
@@ -206,7 +209,7 @@ def format_all_subscriptions(subs: List[models.Subscription]) -> str:
 
 
 def format_monthly_subscriptions(subs: List[models.Subscription]) -> str:
-    """Format only monthly-recurring subscriptions with total spend."""
+    """Format only monthly-recurring subscriptions arranged by upcoming due date."""
     monthly_subs = [
         s for s in subs
         if s.billing_cycle == "monthly" and getattr(s, "status", "active") == "active"
@@ -215,25 +218,28 @@ def format_monthly_subscriptions(subs: List[models.Subscription]) -> str:
     if not monthly_subs:
         return "📅 *Monthly Subscriptions*\n\nNo active monthly subscriptions found."
 
+    # Sort by upcoming next due date ascending
+    sorted_monthly = sorted(monthly_subs, key=lambda s: (s.next_due_date is None, s.next_due_date))
+
     total_php = sum(
         utils.to_PHP(s.price, s.currency or "PHP")
-        for s in monthly_subs
+        for s in sorted_monthly
         if s.is_paid_by_me
     )
 
     lines = [
         "📅 *Monthly Recurring Subscriptions*",
-        f"Active Count: {len(monthly_subs)}",
+        f"Active Count: {len(sorted_monthly)} (Arranged by Due Date)",
         f"Personal Outflow: `₱{total_php:.2f}/mo`\n",
         "━━━━━━━━━━━━━━━━━━━━━━━━━",
     ]
 
-    for s in monthly_subs:
+    for s in sorted_monthly:
         price_str = f"{s.currency} {s.price:.2f}"
         due_str = s.next_due_date.strftime("%b %d, %Y") if s.next_due_date else "N/A"
         payer = "Paid by me" if s.is_paid_by_me else "Shared / Covered"
         lines.append(f"• *{s.name}*: `{price_str}` ({payer})")
-        lines.append(f"  └ Next Due: {due_str} | Category: {s.category or 'Other'}")
+        lines.append(f"  └ Next Due: *{due_str}* | Category: {s.category or 'Other'}")
         lines.append("")
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━")
