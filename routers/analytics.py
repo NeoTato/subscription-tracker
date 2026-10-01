@@ -20,12 +20,29 @@ def get_summary(db: Session = Depends(models.get_db)):
     paused_subs = [s for s in all_subs if getattr(s, "status", "active") == "paused"]
     paid_subs = [s for s in active_subs if s.is_paid_by_me]
 
+    import calendar
+
+    today = date.today()
+    _, last_day = calendar.monthrange(today.year, today.month)
+    end_of_month = date(today.year, today.month, last_day)
+
     # Calculate normalized monthly cost for user-paid active subscriptions
     monthly_total = sum(
         utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
         for s in paid_subs
     )
     annual_total = monthly_total * 12.0
+
+    # Calculate remaining spend for the current calendar month (today through end of month)
+    remaining_subs_this_month = [
+        s for s in paid_subs
+        if s.next_due_date and today <= s.next_due_date <= end_of_month
+    ]
+    remaining_monthly_total = sum(
+        utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
+        for s in remaining_subs_this_month
+    )
+    paid_monthly_total = max(0.0, monthly_total - remaining_monthly_total)
 
     # Find upcoming payment safely among active paid subscriptions
     upcoming = None
@@ -53,6 +70,8 @@ def get_summary(db: Session = Depends(models.get_db)):
 
     return schemas.SummaryResponse(
         monthly_total=round(monthly_total, 2),
+        remaining_monthly_total=round(remaining_monthly_total, 2),
+        paid_monthly_total=round(paid_monthly_total, 2),
         annual_total=round(annual_total, 2),
         currency="PHP",
         sub_count=len(all_subs),

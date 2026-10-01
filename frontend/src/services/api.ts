@@ -28,6 +28,8 @@ export interface CategoryBreakdown {
 
 export interface SummaryResponse {
   monthly_total: number;
+  remaining_monthly_total?: number;
+  paid_monthly_total?: number;
   annual_total: number;
   currency: string;
   sub_count: number;

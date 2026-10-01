@@ -271,6 +271,57 @@ def test_paused_subscription_lifecycle(client):
     assert sum_resumed["paused_count"] == 0
 
 
+def test_remaining_monthly_spend_calculation(client):
+    """Verify remaining monthly spend counts only active user-paid subscriptions due within the current month."""
+    import calendar
+    today = date.today()
+    _, last_day = calendar.monthrange(today.year, today.month)
+
+    # Sub 1: Due on last day of current month (remains to be paid this month)
+    due_this_month = date(today.year, today.month, last_day)
+
+    # Sub 2: Due on 15th of next month (already paid for current cycle or rolled over)
+    if today.month == 12:
+        due_next_month = date(today.year + 1, 1, 15)
+    else:
+        due_next_month = date(today.year, today.month + 1, 15)
+
+    client.post("/api/v1/subscriptions", json={
+        "name": "Sub Due This Month",
+        "price": 300.0,
+        "currency": "PHP",
+        "billing_cycle": "monthly",
+        "next_due_date": due_this_month.isoformat(),
+        "status": "active",
+        "is_paid_by_me": True,
+    })
+
+    client.post("/api/v1/subscriptions", json={
+        "name": "Sub Due Next Month",
+        "price": 700.0,
+        "currency": "PHP",
+        "billing_cycle": "monthly",
+        "next_due_date": due_next_month.isoformat(),
+        "status": "active",
+        "is_paid_by_me": True,
+    })
+
+    client.post("/api/v1/subscriptions", json={
+        "name": "Shared Sub (Not Paid by Me)",
+        "price": 500.0,
+        "currency": "PHP",
+        "billing_cycle": "monthly",
+        "next_due_date": due_this_month.isoformat(),
+        "status": "active",
+        "is_paid_by_me": False,
+    })
+
+    summary = client.get("/api/v1/analytics/summary").json()
+    assert summary["monthly_total"] == 1000.0  # 300 + 700 (user-paid only)
+    assert summary["remaining_monthly_total"] == 300.0  # only Sub Due This Month
+    assert summary["paid_monthly_total"] == 700.0  # 1000 - 300
+
+
 def test_telegram_bot_formatting_and_actions():
     """Verify telegram formatting helpers and bot action dispatch."""
     import telegram_bot

@@ -254,10 +254,21 @@ def format_financial_summary(db: Session) -> str:
     active_subs = [s for s in all_subs if getattr(s, "status", "active") == "active"]
     paused_subs = [s for s in all_subs if getattr(s, "status", "active") == "paused"]
 
+    import calendar
+    today = date.today()
+    _, last_day = calendar.monthrange(today.year, today.month)
+    end_of_month = date(today.year, today.month, last_day)
+
+    paid_subs = [s for s in active_subs if s.is_paid_by_me]
+
     monthly_personal = sum(
         utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
-        for s in active_subs
-        if s.is_paid_by_me
+        for s in paid_subs
+    )
+    remaining_personal = sum(
+        utils.to_PHP(utils.to_monthly(s), s.currency or "PHP")
+        for s in paid_subs
+        if s.next_due_date and today <= s.next_due_date <= end_of_month
     )
     annual_personal = monthly_personal * 12
 
@@ -268,15 +279,16 @@ def format_financial_summary(db: Session) -> str:
 
     lines = [
         "📊 *SubSentry: Financial KPI Summary*",
-        f"📅 Date: _{date.today().strftime('%B %d, %Y')}_\n",
+        f"📅 Date: _{today.strftime('%B %d, %Y')}_\n",
         "━━━━━━━━━━━━━━━━━━━━━━━━━",
         f"💳 *Monthly Outflow (Personal):* `₱{monthly_personal:.2f}/mo`",
+        f"⏳ *Remaining This Month:* `₱{remaining_personal:.2f}`",
         f"📈 *Annualized Estimate:* `₱{annual_personal:.2f}/yr`",
         f"🌐 *Overall Tracked Value:* `₱{monthly_overall:.2f}/mo`\n",
         "━━━━━━━━━━━━━━━━━━━━━━━━━",
         f"📦 *Active Subscriptions:* {len(active_subs)}",
         f"⏸️ *Paused on Hold:* {len(paused_subs)}",
-        f"👤 *Paid by You:* {sum(1 for s in active_subs if s.is_paid_by_me)}",
+        f"👤 *Paid by You:* {len(paid_subs)}",
         f"👥 *Shared / Covered:* {sum(1 for s in active_subs if not s.is_paid_by_me)}",
     ]
 

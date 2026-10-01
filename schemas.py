@@ -214,6 +214,8 @@ class CategoryBreakdown(BaseModel):
 
 class SummaryResponse(BaseModel):
     monthly_total: float
+    remaining_monthly_total: float = 0.0
+    paid_monthly_total: float = 0.0
     annual_total: float
     currency: str = "PHP"
     sub_count: int

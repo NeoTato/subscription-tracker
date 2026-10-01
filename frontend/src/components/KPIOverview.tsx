@@ -12,6 +12,7 @@ export const KPIOverview: React.FC<KPIOverviewProps> = ({
   alertCount,
 }) => {
   const monthlyTotal = summary?.monthly_total ?? 0;
+  const remainingMonthlyTotal = summary?.remaining_monthly_total ?? 0;
   const annualTotal = summary?.annual_total ?? monthlyTotal * 12;
   const subCount = summary?.sub_count ?? 0;
   const paidByMeCount = summary?.paid_by_me_count ?? 0;
@@ -38,14 +39,26 @@ export const KPIOverview: React.FC<KPIOverviewProps> = ({
               maximumFractionDigits: 2,
             })}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-            <span>Annual est:</span>
-            <span className="text-slate-800 dark:text-slate-300 font-medium">
-              ₱
-              {annualTotal.toLocaleString("en-US", {
-                maximumFractionDigits: 0,
-              })}
-            </span>
+          <div className="text-xs mt-1.5 flex flex-col gap-0.5">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
+              <span className="text-slate-500 dark:text-slate-400">Remaining:</span>
+              <span className="font-semibold text-amber-700 dark:text-amber-400">
+                ₱
+                {remainingMonthlyTotal.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-[11px]">
+              <span>Annual est:</span>
+              <span className="text-slate-700 dark:text-slate-300 font-medium">
+                ₱
+                {annualTotal.toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
+              </span>
+            </div>
           </div>
         </div>
       </div>
